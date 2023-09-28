@@ -1019,11 +1019,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\SWD392_Github\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FBusSchedule].API\\Team6.[FBusSchedule].API.csproj",
+      "projectUniqueName": "D:\\SWD392_Project\\Team6.[FBusSchedule].API\\Team6.[FBusSchedule].API\\Team6.[FBusSchedule].API.csproj",
       "projectName": "Team6.[FBusSchedule].API",
-      "projectPath": "D:\\SWD392_Github\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FBusSchedule].API\\Team6.[FBusSchedule].API.csproj",
+      "projectPath": "D:\\SWD392_Project\\Team6.[FBusSchedule].API\\Team6.[FBusSchedule].API\\Team6.[FBusSchedule].API.csproj",
       "packagesPath": "C:\\Users\\nvtie\\.nuget\\packages\\",
-      "outputPath": "D:\\SWD392_Github\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FBusSchedule].API\\obj\\",
+      "outputPath": "D:\\SWD392_Project\\Team6.[FBusSchedule].API\\Team6.[FBusSchedule].API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\visual studio\\Shared\\NuGetPackages"
