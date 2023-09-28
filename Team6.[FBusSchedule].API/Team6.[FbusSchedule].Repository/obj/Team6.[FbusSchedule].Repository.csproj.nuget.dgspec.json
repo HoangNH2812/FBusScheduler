@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\SWD392_Project\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Repository\\Team6.[FbusSchedule].Repository.csproj": {}
+    "D:\\SWD392_Github\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Repository\\Team6.[FbusSchedule].Repository.csproj": {}
   },
   "projects": {
-    "D:\\SWD392_Project\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Repository\\Team6.[FbusSchedule].Repository.csproj": {
+    "D:\\SWD392_Github\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Repository\\Team6.[FbusSchedule].Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\SWD392_Project\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Repository\\Team6.[FbusSchedule].Repository.csproj",
+        "projectUniqueName": "D:\\SWD392_Github\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Repository\\Team6.[FbusSchedule].Repository.csproj",
         "projectName": "Team6.[FbusSchedule].Repository",
-        "projectPath": "D:\\SWD392_Project\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Repository\\Team6.[FbusSchedule].Repository.csproj",
+        "projectPath": "D:\\SWD392_Github\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Repository\\Team6.[FbusSchedule].Repository.csproj",
         "packagesPath": "C:\\Users\\nvtie\\.nuget\\packages\\",
-        "outputPath": "D:\\SWD392_Project\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Repository\\obj\\",
+        "outputPath": "D:\\SWD392_Github\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Repository\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\visual studio\\Shared\\NuGetPackages"
@@ -50,6 +50,8 @@
               "version": "[7.0.11, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.11, )"
             },
@@ -62,6 +64,14 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[7.0.11, )"
+            },
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "Microsoft.Extensions.Configuration.Json": {
+              "target": "Package",
+              "version": "[7.0.0, )"
             },
             "Npgsql.EntityFrameworkCore.PostgreSQL": {
               "target": "Package",
