@@ -1,0 +1,43 @@
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Team6._FbusSchedule_.Repository.EntityModel;
+
+namespace Team6._FbusSchedule_.Repository
+{
+    public class RepositoryBase<T> where T : class
+    {
+        private readonly PostgresContext _context;
+        private readonly DbSet<T> _dbSet;
+        public RepositoryBase()
+        {
+            _context = new PostgresContext();
+            _dbSet = _context.Set<T>();
+        }
+        public IQueryable<T> GetAll()
+        {
+            return _dbSet;
+        }
+
+        public void Create(T entity)
+        {
+            _dbSet.Add(entity);
+            _context.SaveChanges();
+        }
+        public void Delete(T entity)
+        {
+            _dbSet.Remove(entity);
+            _context.SaveChanges();
+        }
+        public void Update(T entity)
+        {
+            var tracker = _context.Attach(entity);
+            tracker.State = EntityState.Modified;
+            //_dbSet.Update(entity);
+            _context.SaveChanges();
+        }
+    }
+}

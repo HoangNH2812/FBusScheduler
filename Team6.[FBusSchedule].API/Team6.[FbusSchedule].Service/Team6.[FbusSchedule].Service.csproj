@@ -7,4 +7,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="BusinessLogic\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Team6.[FbusSchedule].Repository\Team6.[FbusSchedule].Repository.csproj" />
+  </ItemGroup>
+
 </Project>
