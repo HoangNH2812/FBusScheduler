@@ -16,7 +16,7 @@ namespace Team6._FbusSchedule_.Service.Service
         {
             repository = new CustomerRepository();
         }
-        public List<Customer> GetAll()
+        public List<Customer> GetCustomers()
         {
             return repository.GetAll().ToList();
         }
