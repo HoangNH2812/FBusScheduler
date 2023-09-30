@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using Team6._FbusSchedule_.Repository.EntityModel;
 using Team6._FbusSchedule_.Service.Service;
-using Team6._FBusSchedule_.API.Ef_Model;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,12 +11,12 @@ namespace Team6._FBusSchedule_.API.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
+        CustomerService customerService = new CustomerService();
         // GET: api/<CustomerController>
         [HttpGet]
         public List<Customer> Get()
         {
             List<Customer> result = new List<Customer>();
-            CustomerService customerService = new CustomerService();
             var cuList = customerService.GetCustomers();
             cuList.ForEach(row => result.Add(new Customer()
             {
@@ -30,13 +29,14 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // GET api/<CustomerController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("{id:guid}")]
+        public int Get(Guid id)
         {
-            return "value";
+            var count= customerService.Count(id);
+            return count;
         }
 
-        // POST api/<CustomerController>
+       /* // POST api/<CustomerController>
         [HttpPost]
         public void Post([FromBody] string value)
         {
@@ -52,6 +52,6 @@ namespace Team6._FBusSchedule_.API.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-        }
+        }*/
     }
 }
