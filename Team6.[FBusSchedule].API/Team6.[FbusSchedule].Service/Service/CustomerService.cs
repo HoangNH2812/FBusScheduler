@@ -32,7 +32,7 @@ namespace Team6._FbusSchedule_.Service.Service
         {
             repository.Delete(obj);
         }
-        public int Count(Guid id)
+        public int Count(long id)
         {
             return repository.GetAll().Where(p => p.CustomerId.Equals(id)).Count();
         }

@@ -5,11 +5,11 @@ namespace Team6._FbusSchedule_.Repository.EntityModel;
 
 public partial class Bus
 {
-    public Guid BusId { get; set; }
+    public long BusId { get; set; }
 
-    public string BusNumber { get; set; }
+    public int BusNumber { get; set; }
 
-    public string CurretLocation { get; set; }
+    public string CurrentLocation { get; set; }
 
     public string BusStatus { get; set; }
 

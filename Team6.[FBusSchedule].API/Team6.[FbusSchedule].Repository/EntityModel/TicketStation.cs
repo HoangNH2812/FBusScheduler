@@ -5,9 +5,9 @@ namespace Team6._FbusSchedule_.Repository.EntityModel;
 
 public partial class TicketStation
 {
-    public Guid TickerId { get; set; }
+    public long TicketId { get; set; }
 
-    public Guid StationId { get; set; }
+    public long StationId { get; set; }
 
     public DateTime? CheckInTime { get; set; }
 
@@ -15,5 +15,5 @@ public partial class TicketStation
 
     public virtual Station Station { get; set; }
 
-    public virtual Ticket Ticker { get; set; }
+    public virtual Ticket Ticket { get; set; }
 }

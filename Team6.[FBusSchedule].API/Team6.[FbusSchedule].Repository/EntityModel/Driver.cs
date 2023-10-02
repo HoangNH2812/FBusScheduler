@@ -5,7 +5,7 @@ namespace Team6._FbusSchedule_.Repository.EntityModel;
 
 public partial class Driver
 {
-    public Guid DriverId { get; set; }
+    public long DriverId { get; set; }
 
     public string DriverName { get; set; }
 

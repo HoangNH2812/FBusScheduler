@@ -29,8 +29,8 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // GET api/<CustomerController>/5
-        [HttpGet("{id:guid}")]
-        public int Get(Guid id)
+        [HttpGet("{id}")]
+        public long Get(long id)
         {
             var count= customerService.Count(id);
             return count;

@@ -5,21 +5,19 @@ namespace Team6._FbusSchedule_.Repository.EntityModel;
 
 public partial class Ticket
 {
-    public Guid TicketId { get; set; }
+    public long TicketId { get; set; }
 
-    public string StudentName { get; set; }
+    public string CustomerName { get; set; }
 
-    public DateTime DepartureTime { get; set; }
+    public DateTime? DeparturTime { get; set; }
 
-    public DateTime ArrivalTime { get; set; }
+    public DateTime? ArrivalTime { get; set; }
 
     public string Comment { get; set; }
 
     public int? Status { get; set; }
 
-    public Guid? TripId { get; set; }
-
-    public Guid? CustomerId { get; set; }
+    public long? CustomerId { get; set; }
 
     public virtual Customer Customer { get; set; }
 

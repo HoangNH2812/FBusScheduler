@@ -5,9 +5,9 @@ namespace Team6._FbusSchedule_.Repository.EntityModel;
 
 public partial class Station
 {
-    public Guid StationId { get; set; }
+    public long StationId { get; set; }
 
-    public string StationName { get; set; }
+    public DateTime StationName { get; set; }
 
     public string Location { get; set; }
 

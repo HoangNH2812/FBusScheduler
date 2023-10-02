@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace Team6._FbusSchedule_.Repository.EntityModel;
 
@@ -37,20 +36,9 @@ public partial class PostgresContext : DbContext
     public virtual DbSet<Trip> Trips { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            optionsBuilder.UseNpgsql(GetConnectionStrings());
-        }
-    }
-    private string GetConnectionStrings()
-    {
-        IConfiguration config = new ConfigurationBuilder()
-         .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json", true, true)
-        .Build();
-        return config["ConnectionStrings:DB"];
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseNpgsql("User Id=postgres;Password=mwJvgQqPzjhXwWrb;Server=db.lnyxdixalclqvtxigwnl.supabase.co;Port=5432;Database=postgres");
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
@@ -74,43 +62,24 @@ public partial class PostgresContext : DbContext
 
             entity.ToTable("Bus");
 
-            entity.HasIndex(e => e.BusNumber, "Bus_BusNumber_key").IsUnique();
-
-            entity.HasIndex(e => e.BusStatus, "Bus_BusStatus_key").IsUnique();
-
-            entity.HasIndex(e => e.CurretLocation, "Bus_CurretLocation_key").IsUnique();
-
-            entity.Property(e => e.BusId)
-                .HasDefaultValueSql("gen_random_uuid()")
-                .HasColumnName("BusID");
-            entity.Property(e => e.BusNumber)
-                .IsRequired()
-                .HasColumnType("character varying");
-            entity.Property(e => e.BusStatus)
-                .IsRequired()
-                .HasColumnType("character varying");
-            entity.Property(e => e.CurretLocation)
-                .IsRequired()
-                .HasColumnType("character varying");
+            entity.Property(e => e.BusId).HasColumnName("BusID");
+            entity.Property(e => e.BusStatus).HasColumnType("character varying");
+            entity.Property(e => e.CurrentLocation).HasColumnType("character varying");
         });
 
         modelBuilder.Entity<Customer>(entity =>
         {
-            entity.HasKey(e => e.CustomerId).HasName("Student_pkey");
+            entity.HasKey(e => e.CustomerId).HasName("Customer_pkey");
 
             entity.ToTable("Customer");
 
-            entity.HasIndex(e => e.Email, "Student_Email_key").IsUnique();
+            entity.HasIndex(e => e.CustomerName, "Customer_CustomerName_key").IsUnique();
 
-            entity.HasIndex(e => e.CustomerName, "Student_StudentName_key").IsUnique();
-
-            entity.Property(e => e.CustomerId)
-                .HasDefaultValueSql("gen_random_uuid()")
-                .HasColumnName("CustomerID");
+            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
             entity.Property(e => e.CustomerName)
                 .IsRequired()
                 .HasColumnType("character varying");
-            entity.Property(e => e.Email).IsRequired();
+            entity.Property(e => e.Email).HasColumnType("character varying");
         });
 
         modelBuilder.Entity<DetailTrip>(entity =>
@@ -142,9 +111,7 @@ public partial class PostgresContext : DbContext
 
             entity.ToTable("Driver");
 
-            entity.Property(e => e.DriverId)
-                .HasDefaultValueSql("gen_random_uuid()")
-                .HasColumnName("DriverID");
+            entity.Property(e => e.DriverId).HasColumnName("DriverID");
             entity.Property(e => e.DriverName)
                 .IsRequired()
                 .HasColumnType("character varying");
@@ -156,8 +123,11 @@ public partial class PostgresContext : DbContext
 
             entity.ToTable("Routation");
 
-            entity.Property(e => e.RouteId).HasColumnName("RouteID");
+            entity.Property(e => e.RouteId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("RouteID");
             entity.Property(e => e.StationId).HasColumnName("StationID");
+            entity.Property(e => e.DefaultDuration).HasColumnType("timestamp without time zone");
 
             entity.HasOne(d => d.Route).WithMany(p => p.Routations)
                 .HasForeignKey(d => d.RouteId)
@@ -176,11 +146,7 @@ public partial class PostgresContext : DbContext
 
             entity.ToTable("Route");
 
-            entity.HasIndex(e => e.StartingLocation, "Route_StartingLocation_key").IsUnique();
-
-            entity.Property(e => e.RouteId)
-                .HasDefaultValueSql("gen_random_uuid()")
-                .HasColumnName("RouteID");
+            entity.Property(e => e.RouteId).HasColumnName("RouteID");
             entity.Property(e => e.Destination).HasColumnType("character varying");
             entity.Property(e => e.Distance).HasColumnType("character varying");
             entity.Property(e => e.RouteName).HasColumnType("character varying");
@@ -195,13 +161,9 @@ public partial class PostgresContext : DbContext
 
             entity.ToTable("Station");
 
-            entity.Property(e => e.StationId)
-                .HasDefaultValueSql("gen_random_uuid()")
-                .HasColumnName("StationID");
+            entity.Property(e => e.StationId).HasColumnName("StationID");
             entity.Property(e => e.Location).HasColumnType("character varying");
-            entity.Property(e => e.StationName)
-                .IsRequired()
-                .HasColumnType("character varying");
+            entity.Property(e => e.StationName).HasDefaultValueSql("now()");
         });
 
         modelBuilder.Entity<Ticket>(entity =>
@@ -210,23 +172,14 @@ public partial class PostgresContext : DbContext
 
             entity.ToTable("Ticket");
 
-            entity.HasIndex(e => e.ArrivalTime, "Ticket_ArrivalTime_key").IsUnique();
-
-            entity.HasIndex(e => e.DepartureTime, "Ticket_DepartureTime_key").IsUnique();
-
-            entity.HasIndex(e => e.StudentName, "Ticket_PassengerName_key").IsUnique();
-
-            entity.Property(e => e.TicketId)
-                .HasDefaultValueSql("gen_random_uuid()")
-                .HasColumnName("TicketID");
+            entity.Property(e => e.TicketId).HasColumnName("TicketID");
             entity.Property(e => e.ArrivalTime).HasColumnType("timestamp without time zone");
             entity.Property(e => e.Comment).HasColumnType("character varying");
             entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
-            entity.Property(e => e.DepartureTime).HasColumnType("timestamp without time zone");
-            entity.Property(e => e.StudentName)
+            entity.Property(e => e.CustomerName)
                 .IsRequired()
                 .HasColumnType("character varying");
-            entity.Property(e => e.TripId).HasColumnName("TripID");
+            entity.Property(e => e.DeparturTime).HasColumnType("timestamp without time zone");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.CustomerId)
@@ -235,33 +188,37 @@ public partial class PostgresContext : DbContext
 
         modelBuilder.Entity<TicketStation>(entity =>
         {
-            entity.HasKey(e => new { e.TickerId, e.StationId }).HasName("Ticket_Station_pkey");
+            entity.HasKey(e => new { e.TicketId, e.StationId }).HasName("TicketStation_pkey");
 
-            entity.ToTable("Ticket_Station");
+            entity.ToTable("TicketStation");
 
-            entity.Property(e => e.TickerId).HasColumnName("TickerID");
+            entity.Property(e => e.TicketId)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("TicketID");
             entity.Property(e => e.StationId).HasColumnName("StationID");
             entity.Property(e => e.CheckInTime).HasColumnType("timestamp without time zone");
-            entity.Property(e => e.CheckOutTime).HasColumnType("timestamp without time zone");
+            entity.Property(e => e.CheckOutTime)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("CheckOutTIme");
 
             entity.HasOne(d => d.Station).WithMany(p => p.TicketStations)
                 .HasForeignKey(d => d.StationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Ticket_Station_StationID_fkey");
+                .HasConstraintName("TicketStation_StationID_fkey");
 
-            entity.HasOne(d => d.Ticker).WithMany(p => p.TicketStations)
-                .HasForeignKey(d => d.TickerId)
+            entity.HasOne(d => d.Ticket).WithMany(p => p.TicketStations)
+                .HasForeignKey(d => d.TicketId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Ticket_Station_TickerID_fkey");
+                .HasConstraintName("TicketStation_TicketID_fkey");
         });
 
         modelBuilder.Entity<Trip>(entity =>
         {
-            entity.HasKey(e => e.Trip1).HasName("Trip_pkey");
+            entity.HasKey(e => e.TripId).HasName("Trip_pkey");
 
             entity.ToTable("Trip");
 
-            entity.Property(e => e.Trip1).HasColumnName("Trip");
+            entity.Property(e => e.TripId).HasColumnName("TripID");
             entity.Property(e => e.BusId).HasColumnName("BusID");
             entity.Property(e => e.DriverId).HasColumnName("DriverID");
             entity.Property(e => e.RouteId).HasColumnName("RouteID");
