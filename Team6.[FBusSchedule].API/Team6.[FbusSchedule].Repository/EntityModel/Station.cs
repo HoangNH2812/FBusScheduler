@@ -7,7 +7,7 @@ public partial class Station
 {
     public long StationId { get; set; }
 
-    public DateTime StationName { get; set; }
+    public string StationName { get; set; }
 
     public string Location { get; set; }
 

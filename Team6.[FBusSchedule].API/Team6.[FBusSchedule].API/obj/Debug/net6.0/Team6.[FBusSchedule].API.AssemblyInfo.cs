@@ -11,6 +11,7 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("e65a9d48-45d8-4226-afc4-a0c93d63d24c")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("Team6.[FBusSchedule].API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]

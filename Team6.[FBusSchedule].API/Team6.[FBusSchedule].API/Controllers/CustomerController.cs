@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections.ObjectModel;
 using Team6._FbusSchedule_.Repository.EntityModel;
 using Team6._FbusSchedule_.Service.Service;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using System.Collections.Generic;
 
 namespace Team6._FBusSchedule_.API.Controllers
 {
@@ -11,47 +9,75 @@ namespace Team6._FBusSchedule_.API.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        CustomerService customerService = new CustomerService();
-        // GET: api/<CustomerController>
+        private readonly CustomerService _customerService;
+
+        public CustomerController()
+        {
+            _customerService = new CustomerService();
+        }
+
+        // GET: api/Customer
         [HttpGet]
-        public List<Customer> Get()
+        public ActionResult<IEnumerable<Customer>> Get()
         {
-            List<Customer> result = new List<Customer>();
-            var cuList = customerService.GetCustomers();
-            cuList.ForEach(row => result.Add(new Customer()
-            {
-                CustomerId = row.CustomerId,
-                CustomerName = row.CustomerName,
-                Age = row.Age,
-                Email = row.Email,
-            }));
-            return result;
+            var customers = _customerService.GetCustomers();
+            return Ok(customers);
         }
 
-        // GET api/<CustomerController>/5
+        // GET: api/Customer/5
         [HttpGet("{id}")]
-        public long Get(long id)
+        public ActionResult<Customer> Get(long id)
         {
-            var count= customerService.Count(id);
-            return count;
+            var customer = _customerService.GetCustomerById(id);
+            if (customer == null)
+                return NotFound();
+
+            return Ok(customer);
         }
 
-       /* // POST api/<CustomerController>
+        // POST: api/Customer
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post([FromBody] Customer customer)
         {
+            if (customer == null)
+                return BadRequest("Invalid data.");
+
+            _customerService.CreateCustomer(customer);
+            return CreatedAtAction(nameof(Get), new { id = customer.CustomerId }, customer);
         }
 
-        // PUT api/<CustomerController>/5
+        // PUT: api/Customer/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public IActionResult Put(long id, [FromBody] Customer customer)
         {
+            if (customer == null || id != customer.CustomerId)
+                return BadRequest("Invalid data.");
+
+            var existingCustomer = _customerService.GetCustomerById(id);
+            if (existingCustomer == null)
+                return NotFound();
+
+            _customerService.UpdateCustomer(customer);
+            return Ok(customer);
         }
 
-        // DELETE api/<CustomerController>/5
+        // DELETE: api/Customer/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(long id)
         {
-        }*/
+            var customer = _customerService.GetCustomerById(id);
+            if (customer == null)
+                return NotFound();
+
+            _customerService.DeleteCustomer(id);
+            return Ok(customer);
+        }
+
+        // GET: api/Customer/Count
+        [HttpGet("Count")]
+        public int Count()
+        {
+            return _customerService.CountCustomers();
+        }
     }
 }

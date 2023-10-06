@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "8Z+ykl9ERF7384B9ALOZvulN+0tdGYKRU/5MpOa3eJ2wY6WihsdHLb9opV4WfJAmLpm5ai9Rah56Ork8h00g6w==",
+  "dgSpecHash": "uvsd7sw7mw6QlLDzUmn16C4qTbOpcuTguYls/uFhk2yf5gOfkwnentUkmtBXPc0Gs0AE9h3p7hPK0hRMbarXwA==",
   "success": true,
   "projectFilePath": "D:\\SWD392_Github\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FBusSchedule].API\\Team6.[FBusSchedule].API.csproj",
   "expectedPackageFiles": [
@@ -33,6 +33,7 @@
     "C:\\Users\\nvtie\\.nuget\\packages\\microsoft.extensions.options\\7.0.0\\microsoft.extensions.options.7.0.0.nupkg.sha512",
     "C:\\Users\\nvtie\\.nuget\\packages\\microsoft.extensions.primitives\\7.0.0\\microsoft.extensions.primitives.7.0.0.nupkg.sha512",
     "C:\\Users\\nvtie\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\nvtie\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.19.4\\microsoft.visualstudio.azure.containers.tools.targets.1.19.4.nupkg.sha512",
     "C:\\Users\\nvtie\\.nuget\\packages\\npgsql\\7.0.6\\npgsql.7.0.6.nupkg.sha512",
     "C:\\Users\\nvtie\\.nuget\\packages\\npgsql.entityframeworkcore.postgresql\\7.0.11\\npgsql.entityframeworkcore.postgresql.7.0.11.nupkg.sha512",
     "C:\\Users\\nvtie\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",

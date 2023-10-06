@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Team6._FbusSchedule_.Repository.EntityModel;
 
@@ -36,9 +37,20 @@ public partial class PostgresContext : DbContext
     public virtual DbSet<Trip> Trips { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("User Id=postgres;Password=mwJvgQqPzjhXwWrb;Server=db.lnyxdixalclqvtxigwnl.supabase.co;Port=5432;Database=postgres");
-
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseNpgsql(GetConnectionStrings());
+        }
+    }
+    private string GetConnectionStrings()
+    {
+        IConfiguration config = new ConfigurationBuilder()
+         .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json", true, true)
+        .Build();
+        return config["ConnectionStrings:DB"];
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
@@ -73,8 +85,6 @@ public partial class PostgresContext : DbContext
 
             entity.ToTable("Customer");
 
-            entity.HasIndex(e => e.CustomerName, "Customer_CustomerName_key").IsUnique();
-
             entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
             entity.Property(e => e.CustomerName)
                 .IsRequired()
@@ -89,7 +99,7 @@ public partial class PostgresContext : DbContext
             entity.ToTable("DetailTrip");
 
             entity.Property(e => e.TripId)
-                .ValueGeneratedOnAdd()
+                .ValueGeneratedNever()
                 .HasColumnName("TripID");
             entity.Property(e => e.ArrivalTime).HasColumnType("timestamp without time zone");
             entity.Property(e => e.StationId).HasColumnName("StationID");
@@ -163,7 +173,9 @@ public partial class PostgresContext : DbContext
 
             entity.Property(e => e.StationId).HasColumnName("StationID");
             entity.Property(e => e.Location).HasColumnType("character varying");
-            entity.Property(e => e.StationName).HasDefaultValueSql("now()");
+            entity.Property(e => e.StationName)
+                .IsRequired()
+                .HasColumnType("character varying");
         });
 
         modelBuilder.Entity<Ticket>(entity =>

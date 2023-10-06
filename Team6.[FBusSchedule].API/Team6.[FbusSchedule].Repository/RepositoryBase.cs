@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Team6._FbusSchedule_.Repository.EntityModel;
 
@@ -12,32 +10,54 @@ namespace Team6._FbusSchedule_.Repository
     {
         private readonly PostgresContext _context;
         private readonly DbSet<T> _dbSet;
+
         public RepositoryBase()
         {
             _context = new PostgresContext();
             _dbSet = _context.Set<T>();
         }
-        public IQueryable<T> GetAll()
+
+        // Retrieve a Product
+        public async Task<T> RetrieveProduct(long id)
+        {
+            return await _dbSet.FindAsync(id);
+        }
+
+        // Create a Product
+        public void CreateProduct(T product)
+        {
+            _dbSet.Add(product);
+            _context.SaveChanges();
+        }
+
+        // Update a Product
+        public void UpdateProduct(T product)
+        {
+            _dbSet.Update(product);
+            _context.SaveChanges();
+        }
+
+        // Delete a Product
+        public void DeleteProduct(long id)
+        {
+            var product = _dbSet.Find(id);
+            if (product != null)
+            {
+                _dbSet.Remove(product);
+                _context.SaveChanges();
+            }
+        }
+
+        // List Products
+        public IQueryable<T> ListProducts()
         {
             return _dbSet;
         }
 
-        public void Create(T entity)
+        // Count Products
+        public int CountProducts()
         {
-            _dbSet.Add(entity);
-            _context.SaveChanges();
-        }
-        public void Delete(T entity)
-        {
-            _dbSet.Remove(entity);
-            _context.SaveChanges();
-        }
-        public void Update(T entity)
-        {
-            var tracker = _context.Attach(entity);
-            tracker.State = EntityState.Modified;
-            //_dbSet.Update(entity);
-            _context.SaveChanges();
+            return _dbSet.Count();
         }
     }
 }

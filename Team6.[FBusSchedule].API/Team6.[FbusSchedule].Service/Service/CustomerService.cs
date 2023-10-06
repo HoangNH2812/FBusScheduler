@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Team6._FbusSchedule_.Repository.EntityModel;
@@ -9,32 +8,43 @@ using Team6._FbusSchedule_.Repository.Repository;
 
 namespace Team6._FbusSchedule_.Service.Service
 {
-    public class CustomerService 
+    public class CustomerService
     {
-        CustomerRepository repository;
+        private readonly CustomerRepository _repository;
+
         public CustomerService()
         {
-            repository = new CustomerRepository();
+            _repository = new CustomerRepository();
         }
+
         public List<Customer> GetCustomers()
         {
-            return repository.GetAll().ToList();
+            return _repository.ListProducts().ToList();
         }
-        public void Create(Customer obj)
+
+        public void CreateCustomer(Customer customer)
         {
-            repository.Create(obj);
+            _repository.CreateProduct(customer);
         }
-        public void Update(Customer obj)
+
+        public void UpdateCustomer(Customer customer)
         {
-            repository.Update(obj);
+            _repository.UpdateProduct(customer);
         }
-        public void Delete(Customer obj)
+
+        public void DeleteCustomer(long id)
         {
-            repository.Delete(obj);
+            _repository.DeleteProduct(id);
         }
-        public int Count(long id)
+
+        public Customer GetCustomerById(long id)
         {
-            return repository.GetAll().Where(p => p.CustomerId.Equals(id)).Count();
+            return _repository.RetrieveProduct(id).Result;
+        }
+
+        public int CountCustomers()
+        {
+            return _repository.CountProducts();
         }
     }
 }

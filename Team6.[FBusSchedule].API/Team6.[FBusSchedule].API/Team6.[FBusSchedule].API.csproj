@@ -5,14 +5,18 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Team6._FBusSchedule_.API</RootNamespace>
+	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	<UserSecretsId>e65a9d48-45d8-4226-afc4-a0c93d63d24c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Amazon.Lambda.AspNetCoreServer.Hosting" Version="1.6.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Authentication\" />
     <Folder Include="Authorization\" />
   </ItemGroup>
 
