@@ -7,11 +7,11 @@ namespace Team6._FBusSchedule_.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StationController : ControllerBase
+    public class stationController : ControllerBase
     {
         private readonly StationsService _stationService;
 
-        public StationController()
+        public stationController()
         {
             _stationService = new StationsService();
         }
@@ -73,7 +73,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // GET: api/Station/Count
-        [HttpGet("Count")]
+        [HttpGet("count")]
         public int Count()
         {
             return _stationService.CountStations();

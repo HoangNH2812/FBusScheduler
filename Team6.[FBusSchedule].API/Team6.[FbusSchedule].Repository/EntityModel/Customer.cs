@@ -13,5 +13,7 @@ public partial class Customer
 
     public string Email { get; set; }
 
+    public bool? Status { get; set; }
+
     public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 }

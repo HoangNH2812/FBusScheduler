@@ -15,5 +15,7 @@ public partial class Driver
 
     public bool? DriverStatus { get; set; }
 
+    public bool? Status { get; set; }
+
     public virtual ICollection<Trip> Trips { get; set; } = new List<Trip>();
 }

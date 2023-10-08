@@ -1,9 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "Z9bqySxlgHENYb9oAVuVtFHjmEid+QaS6ynhN05DN5/ylSMYbzT/K4qQW+DPpBjrTi0d86jPW9GbxLUqFI4yFg==",
+  "dgSpecHash": "TjLWm0QXMCIhDFjyJ1iaYm6FjqSoaXWjsqTO/q2vIEPXKMmRn3EaluyYtf0YAUQ+sMNjpDnBiHob9dXYnu84CQ==",
   "success": true,
   "projectFilePath": "D:\\SWD392_Github\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Service\\Team6.[FbusSchedule].Service.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\nvtie\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\nvtie\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
+    "C:\\Users\\nvtie\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\nvtie\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.11\\microsoft.entityframeworkcore.7.0.11.nupkg.sha512",
     "C:\\Users\\nvtie\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.11\\microsoft.entityframeworkcore.abstractions.7.0.11.nupkg.sha512",
     "C:\\Users\\nvtie\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.11\\microsoft.entityframeworkcore.analyzers.7.0.11.nupkg.sha512",

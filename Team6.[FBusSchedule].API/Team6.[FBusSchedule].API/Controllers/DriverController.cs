@@ -9,11 +9,11 @@ namespace Team6._FBusSchedule_.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DriverController : ControllerBase
+    public class driverController : ControllerBase
     {
         private readonly DriverService _driverService;
 
-        public DriverController()
+        public driverController()
         {
             _driverService = new DriverService();
         }
@@ -76,7 +76,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // GET: api/Driver/Count
-        [HttpGet("Count")]
+        [HttpGet("count")]
         public int Count()
         {
             return _driverService.CountDrivers();

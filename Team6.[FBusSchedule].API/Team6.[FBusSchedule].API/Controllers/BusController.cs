@@ -2,63 +2,81 @@
 using Team6._FbusSchedule_.Repository.EntityModel;
 using Team6._FbusSchedule_.Service.Service;
 using System.Collections.Generic;
+using AutoMapper;
+using Team6._FbusSchedule_.Repository.DTO;
 
 namespace Team6._FBusSchedule_.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BusController : ControllerBase
+    public class busController : ControllerBase
     {
         private readonly BusService _busService;
+        private readonly IMapper _mapper;
 
-        public BusController()
+        public busController(IMapper mapper)
         {
             _busService = new BusService();
+            _mapper = mapper;
         }
 
         // GET: api/Bus
         [HttpGet]
-        public ActionResult<IEnumerable<Bus>> Get()
+        public ActionResult<IEnumerable<BusDTO>> Get()
         {
             var buses = _busService.GetBuses();
-            return Ok(buses);
+            var busDtos = _mapper.Map<IEnumerable<BusDTO>>(buses);
+            return Ok(busDtos);
         }
 
         // GET: api/Bus/5
         [HttpGet("{id}")]
-        public ActionResult<Bus> Get(long id)
+        public ActionResult<BusDTO> Get(long id)
         {
             var bus = _busService.GetBusById(id);
             if (bus == null)
                 return NotFound();
-            return Ok(bus);
+
+            var busDto = _mapper.Map<BusDTO>(bus);
+            return Ok(busDto);
         }
 
         // POST: api/Bus
         [HttpPost]
-        public IActionResult Post([FromBody] Bus bus)
+        public IActionResult Post([FromBody] BusDTO busDto)
         {
-            if (bus == null)
+            if (busDto == null)
                 return BadRequest("Invalid data.");
+
+            // Map from BusDTO to Bus
+            var bus = _mapper.Map<Bus>(busDto);
 
             _busService.CreateBus(bus);
             return CreatedAtAction(nameof(Get), new { id = bus.BusId }, bus);
         }
 
-        // PUT: api/Bus/5
         [HttpPut("{id}")]
-        public IActionResult Put(long id, [FromBody] Bus bus)
+        public IActionResult Put(long id, [FromBody] BusDTO busDto)
         {
-            if (bus == null || id != bus.BusId)
+            if (busDto == null || id != busDto.BusId)
                 return BadRequest("Invalid data.");
 
             var existingBus = _busService.GetBusById(id);
             if (existingBus == null)
                 return NotFound();
 
-            _busService.UpdateBus(bus);
-            return Ok(bus);
+            // Cập nhật các thuộc tính của existingBus từ busDto
+            _mapper.Map(busDto, existingBus);
+
+            // Cập nhật Bus trong service
+            _busService.UpdateBus(existingBus);
+
+            // Trả về BusDTO sau khi cập nhật
+            var updatedBusDto = _mapper.Map<BusDTO>(existingBus);
+
+            return Ok(updatedBusDto);
         }
+
 
         // DELETE: api/Bus/5
         [HttpDelete("{id}")]
@@ -73,7 +91,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // GET: api/Bus/Count
-        [HttpGet("Count")]
+        [HttpGet("count")]
         public int Count()
         {
             return _busService.CountBuses();

@@ -17,6 +17,8 @@ public partial class Trip
 
     public long? DriverId { get; set; }
 
+    public bool? Status { get; set; }
+
     public virtual Bus Bus { get; set; }
 
     public virtual DetailTrip DetailTrip { get; set; }

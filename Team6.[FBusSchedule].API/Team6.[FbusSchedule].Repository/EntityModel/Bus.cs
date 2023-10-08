@@ -15,5 +15,7 @@ public partial class Bus
 
     public int? TotalSeats { get; set; }
 
+    public bool? Status { get; set; }
+
     public virtual ICollection<Trip> Trips { get; set; } = new List<Trip>();
 }

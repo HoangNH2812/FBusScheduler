@@ -15,6 +15,8 @@ public partial class Route
 
     public string RouteName { get; set; }
 
+    public bool? Status { get; set; }
+
     public virtual ICollection<Routation> Routations { get; set; } = new List<Routation>();
 
     public virtual ICollection<Trip> Trips { get; set; } = new List<Trip>();
