@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Team6._FbusSchedule_.Repository.DTO;
 using Team6._FbusSchedule_.Repository.EntityModel;
 using Team6._FbusSchedule_.Service.Service;
-using System.Collections.Generic;
 
 namespace Team6._FBusSchedule_.API.Controllers
 {
@@ -10,69 +13,78 @@ namespace Team6._FBusSchedule_.API.Controllers
     public class stationController : ControllerBase
     {
         private readonly StationsService _stationService;
+        private readonly IMapper _mapper;
 
-        public stationController()
+        public stationController(IMapper mapper)
         {
             _stationService = new StationsService();
+            _mapper = mapper;
         }
 
-        // GET: api/Station
         [HttpGet]
-        public ActionResult<IEnumerable<Station>> GetStations()
+        public ActionResult<IEnumerable<StationDTO>> GetStations()
         {
             var stations = _stationService.GetStations();
-            return Ok(stations);
+            var stationDTOs = _mapper.Map<List<StationDTO>>(stations);
+            return Ok(stationDTOs);
         }
 
-        // GET: api/Station/5
         [HttpGet("{id}")]
-        public ActionResult<Station> GetStation(long id)
+        public ActionResult<StationDTO> GetStation(long id)
         {
             var station = _stationService.GetStationById(id);
             if (station == null)
                 return NotFound();
-            return Ok(station);
+
+            var stationDTO = _mapper.Map<StationDTO>(station);
+            return Ok(stationDTO);
         }
 
-        // POST: api/Station
         [HttpPost]
-        public IActionResult Post([FromBody] Station station)
+        public IActionResult Post([FromBody] StationDTO stationDTO)
         {
-            if (station == null)
+            if (stationDTO == null)
+            {
                 return BadRequest("Invalid data.");
+            }
 
+            var station = _mapper.Map<Station>(stationDTO);
             _stationService.CreateStation(station);
             return CreatedAtAction(nameof(GetStation), new { id = station.StationId }, station);
         }
 
-        // PUT: api/Station/5
         [HttpPut("{id}")]
-        public IActionResult Put(long id, [FromBody] _FbusSchedule_.Repository.EntityModel.Station station)
+        public IActionResult Put(long id, [FromBody] StationDTO stationDto)
         {
-            if (station == null || id != station.StationId)
+            if (stationDto == null || id != stationDto.StationId)
                 return BadRequest("Invalid data.");
 
             var existingStation = _stationService.GetStationById(id);
             if (existingStation == null)
                 return NotFound();
 
-            _stationService.UpdateStation(station);
-            return Ok(station);
+            _mapper.Map(stationDto, existingStation);
+            _stationService.UpdateStation(existingStation);
+
+            var updatedStationDto = _mapper.Map<StationDTO>(existingStation);
+
+            return Ok(updatedStationDto);
         }
 
-        // DELETE: api/Station/5
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
-            var station = _stationService.GetStationById(id);
-            if (station == null)
+            var existingStation = _stationService.GetStationById(id);
+
+            if (existingStation == null)
+            {
                 return NotFound();
+            }
 
             _stationService.DeleteStation(id);
-            return Ok(station);
+            return NoContent();
         }
 
-        // GET: api/Station/Count
         [HttpGet("count")]
         public int Count()
         {

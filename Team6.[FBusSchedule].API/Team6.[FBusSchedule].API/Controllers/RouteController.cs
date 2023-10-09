@@ -1,7 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Team6._FbusSchedule_.Repository.DTO;
 using Team6._FbusSchedule_.Repository.EntityModel;
 using Team6._FbusSchedule_.Service.Service;
-using System.Collections.Generic;
+using Route = Team6._FbusSchedule_.Repository.EntityModel.Route;
 
 namespace Team6._FBusSchedule_.API.Controllers
 {
@@ -10,69 +14,78 @@ namespace Team6._FBusSchedule_.API.Controllers
     public class routeController : ControllerBase
     {
         private readonly RouteService _routeService;
+        private readonly IMapper _mapper;
 
-        public routeController()
+        public routeController(IMapper mapper)
         {
             _routeService = new RouteService();
+            _mapper = mapper;
         }
 
-        // GET: api/Route
         [HttpGet]
-        public ActionResult<IEnumerable<_FbusSchedule_.Repository.EntityModel.Route>> Get()
+        public ActionResult<IEnumerable<RouteDTO>> Get()
         {
             var routes = _routeService.GetRoutes();
-            return Ok(routes);
+            var routeDTOs = _mapper.Map<List<RouteDTO>>(routes);
+            return Ok(routeDTOs);
         }
 
-        // GET: api/Route/5
         [HttpGet("{id}")]
-        public ActionResult<_FbusSchedule_.Repository.EntityModel.Route> Get(long id)
+        public ActionResult<RouteDTO> Get(long id)
         {
             var route = _routeService.GetRouteById(id);
             if (route == null)
                 return NotFound();
-            return Ok(route);
+
+            var routeDTO = _mapper.Map<RouteDTO>(route);
+            return Ok(routeDTO);
         }
 
-        // POST: api/Route
         [HttpPost]
-        public IActionResult Post([FromBody] _FbusSchedule_.Repository.EntityModel.Route route)
+        public IActionResult Post([FromBody] RouteDTO routeDTO)
         {
-            if (route == null)
+            if (routeDTO == null)
+            {
                 return BadRequest("Invalid data.");
+            }
 
+            var route = _mapper.Map<Route>(routeDTO);
             _routeService.CreateRoute(route);
             return CreatedAtAction(nameof(Get), new { id = route.RouteId }, route);
         }
 
-        // PUT: api/Route/5
         [HttpPut("{id}")]
-        public IActionResult Put(long id, [FromBody] _FbusSchedule_.Repository.EntityModel.Route route)
+        public IActionResult Put(long id, [FromBody] RouteDTO routeDto)
         {
-            if (route == null || id != route.RouteId)
+            if (routeDto == null || id != routeDto.RouteId)
                 return BadRequest("Invalid data.");
 
             var existingRoute = _routeService.GetRouteById(id);
             if (existingRoute == null)
                 return NotFound();
 
-            _routeService.UpdateRoute(route);
-            return Ok(route);
+            _mapper.Map(routeDto, existingRoute);
+            _routeService.UpdateRoute(existingRoute);
+
+            var updatedRouteDto = _mapper.Map<RouteDTO>(existingRoute);
+
+            return Ok(updatedRouteDto);
         }
 
-        // DELETE: api/Route/5
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
-            var route = _routeService.GetRouteById(id);
-            if (route == null)
+            var existingRoute = _routeService.GetRouteById(id);
+
+            if (existingRoute == null)
+            {
                 return NotFound();
+            }
 
             _routeService.DeleteRoute(id);
-            return Ok(route);
+            return NoContent();
         }
 
-        // GET: api/Route/Count
         [HttpGet("count")]
         public int Count()
         {

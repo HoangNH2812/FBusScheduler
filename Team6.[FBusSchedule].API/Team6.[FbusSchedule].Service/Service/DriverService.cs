@@ -21,9 +21,9 @@ namespace Team6._FbusSchedule_.Service.Service
             return _repository.ListProducts().ToList();
         }
 
-        public async Task<Driver> GetDriverByIdAsync(long id)
+        public Driver GetDriverById(long id)
         {
-            return await _repository.RetrieveProduct(id);
+            return _repository.RetrieveProduct(id).Result;
         }
 
         public void CreateDriver(Driver driver)

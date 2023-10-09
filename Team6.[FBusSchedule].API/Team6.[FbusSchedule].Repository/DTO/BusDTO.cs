@@ -14,7 +14,7 @@ namespace Team6._FbusSchedule_.Repository.DTO
 
         public string CurrentLocation { get; set; }
 
-        public string BusStatus { get; set; }
+        public bool BusStatus { get; set; }
 
         public int? TotalSeats { get; set; }
 

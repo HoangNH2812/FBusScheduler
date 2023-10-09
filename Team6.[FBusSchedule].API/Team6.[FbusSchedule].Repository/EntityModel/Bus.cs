@@ -11,7 +11,7 @@ public partial class Bus
 
     public string CurrentLocation { get; set; }
 
-    public string BusStatus { get; set; }
+    public bool? BusStatus { get; set; }
 
     public int? TotalSeats { get; set; }
 

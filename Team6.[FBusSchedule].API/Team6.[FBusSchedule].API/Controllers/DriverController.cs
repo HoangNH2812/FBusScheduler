@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Team6._FbusSchedule_.Repository.DTO;
 using Team6._FbusSchedule_.Repository.EntityModel;
 using Team6._FbusSchedule_.Service.Service;
 
@@ -12,59 +13,68 @@ namespace Team6._FBusSchedule_.API.Controllers
     public class driverController : ControllerBase
     {
         private readonly DriverService _driverService;
+        private readonly IMapper _mapper;
 
-        public driverController()
+        public driverController(IMapper mapper)
         {
             _driverService = new DriverService();
+            _mapper = mapper;
         }
 
-        // GET: api/Driver
         [HttpGet]
-        public List<Driver> Get()
+        public ActionResult<IEnumerable<DriverDTO>> Get()
         {
-            return _driverService.GetDrivers();
+            var drivers = _driverService.GetDrivers();
+            var driverDTOs = _mapper.Map<List<DriverDTO>>(drivers);
+            return Ok(driverDTOs);
         }
 
-        // GET: api/Driver/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Driver>> Get(long id)
+        public ActionResult<DriverDTO> Get(long id)
         {
-            var driver = await _driverService.GetDriverByIdAsync(id);
-
+            var driver = _driverService.GetDriverById(id);
             if (driver == null)
-            {
                 return NotFound();
+
+            var driverDTO = _mapper.Map<DriverDTO>(driver);
+            return Ok(driverDTO);
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] DriverDTO driverDTO)
+        {
+            if (driverDTO == null)
+            {
+                return BadRequest("Invalid data.");
             }
 
-            return driver;
-        }
-
-        // POST: api/Driver
-        [HttpPost]
-        public IActionResult Post([FromBody] Driver driver)
-        {
+            var driver = _mapper.Map<Driver>(driverDTO);
             _driverService.CreateDriver(driver);
             return CreatedAtAction(nameof(Get), new { id = driver.DriverId }, driver);
         }
 
-        // PUT: api/Driver/{id}
         [HttpPut("{id}")]
-        public IActionResult Put(long id, [FromBody] Driver driver)
+        public IActionResult Put(long id, [FromBody] DriverDTO driverDto)
         {
-            if (id != driver.DriverId)
-            {
-                return BadRequest();
-            }
+            if (driverDto == null || id != driverDto.DriverId)
+                return BadRequest("Invalid data.");
 
-            _driverService.UpdateDriver(driver);
-            return NoContent();
+            var existingDriver = _driverService.GetDriverById(id);
+            if (existingDriver == null)
+                return NotFound();
+
+            _mapper.Map(driverDto, existingDriver);
+            _driverService.UpdateDriver(existingDriver);
+
+            var updatedDriverDto = _mapper.Map<DriverDTO>(existingDriver);
+
+            return Ok(updatedDriverDto);
         }
 
-        // DELETE: api/Driver/{id}
         [HttpDelete("{id}")]
         public IActionResult Delete(long id)
         {
-            var existingDriver = _driverService.GetDriverByIdAsync(id).Result;
+            var existingDriver = _driverService.GetDriverById(id);
 
             if (existingDriver == null)
             {
@@ -75,7 +85,6 @@ namespace Team6._FBusSchedule_.API.Controllers
             return NoContent();
         }
 
-        // GET: api/Driver/Count
         [HttpGet("count")]
         public int Count()
         {
