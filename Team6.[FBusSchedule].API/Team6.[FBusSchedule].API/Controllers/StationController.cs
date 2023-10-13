@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Team6._FbusSchedule_.Repository.DTO;
 using Team6._FbusSchedule_.Repository.EntityModel;
+using Team6._FbusSchedule_.Repository.ViewModel;
+using Team6._FbusSchedule_.Service.IServices;
 using Team6._FbusSchedule_.Service.Service;
 
 namespace Team6._FBusSchedule_.API.Controllers
@@ -12,83 +11,62 @@ namespace Team6._FBusSchedule_.API.Controllers
     [ApiController]
     public class stationController : ControllerBase
     {
-        private readonly StationsService _stationService;
+        private readonly IStationService _stationService;
         private readonly IMapper _mapper;
 
-        public stationController(IMapper mapper)
+        public stationController(IStationService stationService, IMapper mapper)
         {
-            _stationService = new StationsService();
+            _stationService = stationService;
             _mapper = mapper;
         }
-
+        // GET: api/Bus
         [HttpGet]
-        public ActionResult<IEnumerable<StationDTO>> GetStations()
+        public async Task<IActionResult> List()
         {
-            var stations = _stationService.GetStations();
-            var stationDTOs = _mapper.Map<List<StationDTO>>(stations);
-            return Ok(stationDTOs);
+            var _list = await _stationService.Get();
+            return Ok(_list);
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<StationDTO> GetStation(long id)
+
+        // GET: api/Bus/5
+        [HttpGet("{StationID}")]
+        public async Task<IActionResult> ListByID(int StationID)
         {
-            var station = _stationService.GetStationById(id);
+            var _listbyid = await _stationService.GetByID(StationID);
+            return Ok(_listbyid);
+        }
+
+        // POST: api/Bus
+        [HttpPost]
+        public async Task<IActionResult> Create(int StationID, StationVM stationVM)
+        {
+            Station station = new Station();
+            station = _mapper.Map<StationVM, Station>(stationVM);
+            station.StationId = StationID;
+            await _stationService.AddAsync(station);
+            return Ok(station);
+        }
+
+
+        [HttpPut("{StationID}")]
+        public async Task<IActionResult> Update(int StationID, StationVM stationVM)
+        {
+            Station station = _mapper.Map<StationVM, Station>(stationVM);
+            station.StationId = StationID;
+            await _stationService.UpdateAsync(station);
+            return Ok(station);
+        }
+
+        // DELETE: api/Bus/5
+        [HttpDelete("{StationID}")]
+        public async Task<IActionResult> Delete(int StationID)
+        {
+            var station = await _stationService.GetByID(StationID);
             if (station == null)
                 return NotFound();
 
-            var stationDTO = _mapper.Map<StationDTO>(station);
-            return Ok(stationDTO);
-        }
-
-        [HttpPost]
-        public IActionResult Post([FromBody] StationDTO stationDTO)
-        {
-            if (stationDTO == null)
-            {
-                return BadRequest("Invalid data.");
-            }
-
-            var station = _mapper.Map<Station>(stationDTO);
-            _stationService.CreateStation(station);
-            return CreatedAtAction(nameof(GetStation), new { id = station.StationId }, station);
-        }
-
-        [HttpPut("{id}")]
-        public IActionResult Put(long id, [FromBody] StationDTO stationDto)
-        {
-            if (stationDto == null || id != stationDto.StationId)
-                return BadRequest("Invalid data.");
-
-            var existingStation = _stationService.GetStationById(id);
-            if (existingStation == null)
-                return NotFound();
-
-            _mapper.Map(stationDto, existingStation);
-            _stationService.UpdateStation(existingStation);
-
-            var updatedStationDto = _mapper.Map<StationDTO>(existingStation);
-
-            return Ok(updatedStationDto);
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
-        {
-            var existingStation = _stationService.GetStationById(id);
-
-            if (existingStation == null)
-            {
-                return NotFound();
-            }
-
-            _stationService.DeleteStation(id);
-            return NoContent();
-        }
-
-        [HttpGet("count")]
-        public int Count()
-        {
-            return _stationService.CountStations();
+            _stationService.DeleteAsync(StationID);
+            return Ok();
         }
     }
 }

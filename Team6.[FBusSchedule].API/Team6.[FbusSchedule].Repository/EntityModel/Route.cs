@@ -5,7 +5,7 @@ namespace Team6._FbusSchedule_.Repository.EntityModel;
 
 public partial class Route
 {
-    public long RouteId { get; set; }
+    public int RouteId { get; set; }
 
     public string StartingLocation { get; set; }
 

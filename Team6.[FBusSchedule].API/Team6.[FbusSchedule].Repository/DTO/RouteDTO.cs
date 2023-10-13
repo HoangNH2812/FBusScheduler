@@ -8,7 +8,7 @@ namespace Team6._FbusSchedule_.Repository.DTO
 {
     public class RouteDTO
     {
-        public long RouteId { get; set; }
+        public int RouteId { get; set; }
 
         public string StartingLocation { get; set; }
 

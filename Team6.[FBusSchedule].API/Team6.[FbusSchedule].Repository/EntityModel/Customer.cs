@@ -5,7 +5,7 @@ namespace Team6._FbusSchedule_.Repository.EntityModel;
 
 public partial class Customer
 {
-    public long CustomerId { get; set; }
+    public int CustomerId { get; set; }
 
     public string CustomerName { get; set; }
 

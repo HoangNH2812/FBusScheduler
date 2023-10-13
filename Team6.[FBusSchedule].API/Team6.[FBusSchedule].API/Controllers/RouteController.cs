@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Team6._FbusSchedule_.Repository.DTO;
 using Team6._FbusSchedule_.Repository.EntityModel;
+using Team6._FbusSchedule_.Repository.ViewModel;
+using Team6._FbusSchedule_.Service.IServices;
 using Team6._FbusSchedule_.Service.Service;
 using Route = Team6._FbusSchedule_.Repository.EntityModel.Route;
 
@@ -13,83 +17,62 @@ namespace Team6._FBusSchedule_.API.Controllers
     [ApiController]
     public class routeController : ControllerBase
     {
-        private readonly RouteService _routeService;
+        private readonly IRouteService _routeService;
         private readonly IMapper _mapper;
 
-        public routeController(IMapper mapper)
+        public routeController(IRouteService routeService, IMapper mapper)
         {
-            _routeService = new RouteService();
+            _routeService = routeService;
             _mapper = mapper;
         }
-
+        // GET: api/Bus
         [HttpGet]
-        public ActionResult<IEnumerable<RouteDTO>> Get()
+        public async Task<IActionResult> List()
         {
-            var routes = _routeService.GetRoutes();
-            var routeDTOs = _mapper.Map<List<RouteDTO>>(routes);
-            return Ok(routeDTOs);
+            var _list = await _routeService.Get();
+            return Ok(_list);
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<RouteDTO> Get(long id)
+
+        // GET: api/Bus/5
+        [HttpGet("{RouteID}")]
+        public async Task<IActionResult> ListByID(int RouteID)
         {
-            var route = _routeService.GetRouteById(id);
+            var _listbyid = await _routeService.GetByID(RouteID);
+            return Ok(_listbyid);
+        }
+
+        // POST: api/Bus
+        [HttpPost]
+        public async Task<IActionResult> Create(int RouteID, RouteVM routeVM)
+        {
+            Route route = new Route();
+            route = _mapper.Map<RouteVM, Route>(routeVM);
+            route.RouteId = RouteID;
+            await _routeService.AddAsync(route);
+            return Ok(route);
+        }
+
+
+        [HttpPut("{RouteID}")]
+        public async Task<IActionResult> Update(int RouteID, RouteVM routeVM)
+        {
+            var route = _mapper.Map<RouteVM, Route>(routeVM);
+            route.RouteId = RouteID;
+            await _routeService.UpdateAsync(route);
+            return Ok(route);
+        }
+
+        // DELETE: api/Bus/5
+        [HttpDelete("{RouteID}")]
+        public async Task<IActionResult> Delete(int RouteID)
+        {
+            var route = await _routeService.GetByID(RouteID);
             if (route == null)
                 return NotFound();
 
-            var routeDTO = _mapper.Map<RouteDTO>(route);
-            return Ok(routeDTO);
-        }
-
-        [HttpPost]
-        public IActionResult Post([FromBody] RouteDTO routeDTO)
-        {
-            if (routeDTO == null)
-            {
-                return BadRequest("Invalid data.");
-            }
-
-            var route = _mapper.Map<Route>(routeDTO);
-            _routeService.CreateRoute(route);
-            return CreatedAtAction(nameof(Get), new { id = route.RouteId }, route);
-        }
-
-        [HttpPut("{id}")]
-        public IActionResult Put(long id, [FromBody] RouteDTO routeDto)
-        {
-            if (routeDto == null || id != routeDto.RouteId)
-                return BadRequest("Invalid data.");
-
-            var existingRoute = _routeService.GetRouteById(id);
-            if (existingRoute == null)
-                return NotFound();
-
-            _mapper.Map(routeDto, existingRoute);
-            _routeService.UpdateRoute(existingRoute);
-
-            var updatedRouteDto = _mapper.Map<RouteDTO>(existingRoute);
-
-            return Ok(updatedRouteDto);
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
-        {
-            var existingRoute = _routeService.GetRouteById(id);
-
-            if (existingRoute == null)
-            {
-                return NotFound();
-            }
-
-            _routeService.DeleteRoute(id);
-            return NoContent();
-        }
-
-        [HttpGet("count")]
-        public int Count()
-        {
-            return _routeService.CountRoutes();
+            _routeService.DeleteAsync(RouteID);
+            return Ok();
         }
     }
 }

@@ -1309,23 +1309,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\nvtie\\.nuget\\packages\\": {},
-    "D:\\visual studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Admin\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\SWD392_Github\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Service\\Team6.[FbusSchedule].Service.csproj",
+      "projectUniqueName": "C:\\Users\\Admin\\Documents\\GitHub\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Service\\Team6.[FbusSchedule].Service.csproj",
       "projectName": "Team6.[FbusSchedule].Service",
-      "projectPath": "D:\\SWD392_Github\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Service\\Team6.[FbusSchedule].Service.csproj",
-      "packagesPath": "C:\\Users\\nvtie\\.nuget\\packages\\",
-      "outputPath": "D:\\SWD392_Github\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Service\\obj\\",
+      "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Service\\Team6.[FbusSchedule].Service.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Admin\\Documents\\GitHub\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Service\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "D:\\visual studio\\Shared\\NuGetPackages"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\nvtie\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -1334,14 +1334,15 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "D:\\SWD392_Github\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Repository\\Team6.[FbusSchedule].Repository.csproj": {
-              "projectPath": "D:\\SWD392_Github\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Repository\\Team6.[FbusSchedule].Repository.csproj"
+            "C:\\Users\\Admin\\Documents\\GitHub\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Repository\\Team6.[FbusSchedule].Repository.csproj": {
+              "projectPath": "C:\\Users\\Admin\\Documents\\GitHub\\FBusScheduler\\Team6.[FBusSchedule].API\\Team6.[FbusSchedule].Repository\\Team6.[FbusSchedule].Repository.csproj"
             }
           }
         }
@@ -1371,7 +1372,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
       }
     }
   }

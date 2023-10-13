@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using Team6._FbusSchedule_.Repository.EntityModel;
+using Team6._FbusSchedule_.Repository.ViewModel;
+using Team6._FbusSchedule_.Service.IServices;
 using Team6._FbusSchedule_.Service.Service;
-using System.Collections.Generic;
-using Team6._FbusSchedule_.Repository.DTO;
-using AutoMapper;
 
 namespace Team6._FBusSchedule_.API.Controllers
 {
@@ -11,93 +12,61 @@ namespace Team6._FBusSchedule_.API.Controllers
     [ApiController]
     public class customerController : ControllerBase
     {
-        private readonly CustomerService _customerService;
+        private readonly ICustomerService _customerService;
         private readonly IMapper _mapper;
-        public customerController(IMapper mapper)
+
+        public customerController(ICustomerService customerService, IMapper mapper)
         {
-            _customerService = new CustomerService();
+            _customerService = customerService;
             _mapper = mapper;
         }
-
-        // GET: api/Customer
+        // GET: api/Bus
         [HttpGet]
-        public ActionResult<IEnumerable<CustomerDTO>> Get()
+        public async Task<IActionResult> List()
         {
-            var customers = _customerService.GetCustomers();
-            var customerDTOs = _mapper.Map<IEnumerable<CustomerDTO>>(customers);
-            return Ok(customerDTOs);
+            var _list = await _customerService.Get();
+            return Ok(_list);
         }
 
 
-        // GET: api/Customer/5
-        [HttpGet("{id}")]
-        public ActionResult<CustomerDTO> Get(long id)
+        // GET: api/Bus/5
+        [HttpGet("{CustomerId}")]
+        public async Task<IActionResult> ListByID(int CustomerId)
         {
-            var customer = _customerService.GetCustomerById(id);
-            if (customer == null)
-                return NotFound();
-
-            var customerDTO = _mapper.Map<CustomerDTO>(customer);
-            return Ok(customerDTO);
+            var _listbyid = await _customerService.GetByID(CustomerId);
+            return Ok(_listbyid);
         }
 
-
-        // POST: api/Customer
+        // POST: api/Bus
         [HttpPost]
-        public IActionResult Post([FromBody] CustomerDTO customerDTO)
+        public async Task<IActionResult> Create(int CusID,CustomerVM cusVM)
         {
-            if (customerDTO == null)
-            {
-                return BadRequest("Invalid data.");
-            }
-            var customer = _mapper.Map<Customer>(customerDTO);
-            _customerService.CreateCustomer(customer);
-            return CreatedAtAction(nameof(Get), new { id = customer.CustomerId }, customer);
-           
+            Customer cus = new Customer();
+            cus = _mapper.Map<CustomerVM, Customer>(cusVM);
+            cus.CustomerId = CusID;
+            await _customerService.AddAsync(cus);
+            return Ok(cus);
         }
 
 
-        // PUT: api/Customer/5
-        [HttpPut("{id}")]
-        public IActionResult Put(long id, [FromBody] CustomerDTO customerDto)
+        [HttpPut("{CustomerId}")]
+        public async Task<IActionResult> Update(int CustomerId, CustomerVM customerVM)
         {
-            if (customerDto == null || id != customerDto.CustomerId)
-                return BadRequest("Invalid data.");
-
-            var existingCustomer = _customerService.GetCustomerById(id);
-            if (existingCustomer == null)
-                return NotFound();
-
-            // Update properties of existingCustomer from customerDto
-            _mapper.Map(customerDto, existingCustomer);
-
-            // Update the customer in the service
-            _customerService.UpdateCustomer(existingCustomer);
-
-            // Return the updated CustomerDTO
-            var updatedCustomerDto = _mapper.Map<CustomerDTO>(existingCustomer);
-
-            return Ok(updatedCustomerDto);
+            var cus = _mapper.Map<CustomerVM, Customer>(customerVM);
+            cus.CustomerId = CustomerId;
+            await _customerService.UpdateAsync(cus);
+            return Ok(cus);
         }
 
-
-        // DELETE: api/Customer/5
-        [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
+        // DELETE: api/Bus/5
+        [HttpDelete("{CustomerId}")]
+        public async Task<IActionResult> Delete(int CustomerId)
         {
-            var customer = _customerService.GetCustomerById(id);
+            var customer = await _customerService.GetByID(CustomerId);
             if (customer == null)
                 return NotFound();
-
-            _customerService.DeleteCustomer(id);
-            return Ok(customer);
-        }
-
-        // GET: api/Customer/Count
-        [HttpGet("count")]
-        public int Count()
-        {
-            return _customerService.CountCustomers();
+            _customerService.DeleteAsync(CustomerId);
+            return Ok();
         }
     }
 }

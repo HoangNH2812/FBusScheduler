@@ -1,100 +1,74 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Team6._FbusSchedule_.Repository.EntityModel;
-using Team6._FbusSchedule_.Service.Service;
-using System.Collections.Generic;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using Team6._FbusSchedule_.Repository.DTO;
+using Team6._FbusSchedule_.Repository.EntityModel;
+using Team6._FbusSchedule_.Repository.ViewModel;
+using Team6._FbusSchedule_.Service.IServices;
 
 namespace Team6._FBusSchedule_.API.Controllers
 {
+
     [Route("api/[controller]")]
     [ApiController]
     public class busController : ControllerBase
     {
-        private readonly BusService _busService;
+        private readonly IBusService _busService;
         private readonly IMapper _mapper;
 
-        public busController(IMapper mapper)
+        public busController(IBusService busService, IMapper mapper)
         {
-            _busService = new BusService();
+            _busService = busService;
             _mapper = mapper;
         }
-
         // GET: api/Bus
         [HttpGet]
-        public ActionResult<IEnumerable<BusDTO>> Get()
+        public async Task<IActionResult> List()
         {
-            var buses = _busService.GetBuses();
-            var busDtos = _mapper.Map<IEnumerable<BusDTO>>(buses);
-            return Ok(busDtos);
+            var _list = await _busService.Get();
+            return Ok(_list);
         }
 
-        // GET: api/Bus/5
-        [HttpGet("{id}")]
-        public ActionResult<BusDTO> Get(long id)
-        {
-            var bus = _busService.GetBusById(id);
-            if (bus == null)
-                return NotFound();
 
-            var busDto = _mapper.Map<BusDTO>(bus);
-            return Ok(busDto);
+        // GET: api/Bus/5
+        [HttpGet("{BusId}")]
+        public async Task<IActionResult> ListByID(int BusId)
+        {
+            var _listbyid = await _busService.GetByID(BusId);
+            return Ok(_listbyid);
         }
 
         // POST: api/Bus
         [HttpPost]
-        public IActionResult Post([FromBody] BusDTO busDto)
+        public async Task<IActionResult> Create(int BusID,BusVM busVM)
         {
-            if (busDto == null)
-                return BadRequest("Invalid data.");
-
-            // Map from BusDTO to Bus
-            var bus = _mapper.Map<Bus>(busDto);
-
-            _busService.CreateBus(bus);
-            return CreatedAtAction(nameof(Get), new { id = bus.BusId }, bus);
-        }
-
-        [HttpPut("{id}")]
-        public IActionResult Put(long id, [FromBody] BusDTO busDto)
-        {
-            if (busDto == null || id != busDto.BusId)
-                return BadRequest("Invalid data.");
-
-            var existingBus = _busService.GetBusById(id);
-            if (existingBus == null)
-                return NotFound();
-
-            // Cập nhật các thuộc tính của existingBus từ busDto
-            _mapper.Map(busDto, existingBus);
-
-            // Cập nhật Bus trong service
-            _busService.UpdateBus(existingBus);
-
-            // Trả về BusDTO sau khi cập nhật
-            var updatedBusDto = _mapper.Map<BusDTO>(existingBus);
-
-            return Ok(updatedBusDto);
-        }
-
-
-        // DELETE: api/Bus/5
-        [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
-        {
-            var bus = _busService.GetBusById(id);
-            if (bus == null)
-                return NotFound();
-
-            _busService.DeleteBus(id);
+            Bus bus= new Bus();
+            bus = _mapper.Map<BusVM,Bus>(busVM);
+            bus.BusId = BusID;
+            await _busService.AddAsync(bus);
             return Ok(bus);
         }
 
-        // GET: api/Bus/Count
-        [HttpGet("count")]
-        public int Count()
+        [HttpPut("{BusId}")]
+        public async Task<IActionResult> Update(int BusId, [FromBody] BusVM busVM)
         {
-            return _busService.CountBuses();
+            var bus = _mapper.Map<BusVM,Bus>(busVM);
+            bus.BusId = BusId;
+            await _busService.UpdateAsync(bus);
+            return Ok(bus);
+        }
+
+        [HttpDelete("{BusId}")]
+        public async Task<IActionResult> Delete(int BusId)
+        {
+            var bus = await _busService.GetByID(BusId);
+            if (bus == null)
+                return NotFound();
+
+            _busService.DeleteAsync(BusId);
+            return Ok();
         }
     }
 }
+
+

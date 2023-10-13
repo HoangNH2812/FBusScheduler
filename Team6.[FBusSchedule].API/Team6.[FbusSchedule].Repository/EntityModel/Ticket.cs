@@ -5,7 +5,7 @@ namespace Team6._FbusSchedule_.Repository.EntityModel;
 
 public partial class Ticket
 {
-    public long TicketId { get; set; }
+    public int TicketId { get; set; }
 
     public string CustomerName { get; set; }
 
@@ -17,7 +17,7 @@ public partial class Ticket
 
     public int? Status { get; set; }
 
-    public long? CustomerId { get; set; }
+    public int? CustomerId { get; set; }
 
     public virtual Customer Customer { get; set; }
 

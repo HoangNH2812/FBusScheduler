@@ -8,7 +8,7 @@ namespace Team6._FbusSchedule_.Repository.DTO
 {
     public class StationDTO
     {
-        public long StationId { get; set; }
+        public int StationId { get; set; }
 
         public string StationName { get; set; }
 

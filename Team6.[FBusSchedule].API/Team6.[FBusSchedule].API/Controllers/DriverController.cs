@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Team6._FbusSchedule_.Repository.DTO;
+using System;
 using Team6._FbusSchedule_.Repository.EntityModel;
+using Team6._FbusSchedule_.Repository.ViewModel;
+using Team6._FbusSchedule_.Service.IServices;
 using Team6._FbusSchedule_.Service.Service;
 
 namespace Team6._FBusSchedule_.API.Controllers
@@ -12,83 +12,62 @@ namespace Team6._FBusSchedule_.API.Controllers
     [ApiController]
     public class driverController : ControllerBase
     {
-        private readonly DriverService _driverService;
+        private readonly IDriverService _driverService;
         private readonly IMapper _mapper;
 
-        public driverController(IMapper mapper)
+        public driverController(IDriverService driverService, IMapper mapper)
         {
-            _driverService = new DriverService();
+            _driverService = driverService;
             _mapper = mapper;
         }
-
+        // GET: api/Bus
         [HttpGet]
-        public ActionResult<IEnumerable<DriverDTO>> Get()
+        public async Task<IActionResult> List()
         {
-            var drivers = _driverService.GetDrivers();
-            var driverDTOs = _mapper.Map<List<DriverDTO>>(drivers);
-            return Ok(driverDTOs);
+            var _list = await _driverService.Get();
+            return Ok(_list);
         }
 
-        [HttpGet("{id}")]
-        public ActionResult<DriverDTO> Get(long id)
+
+        // GET: api/Bus/5
+        [HttpGet("{DriverID}")]
+        public async Task<IActionResult> ListByID(int DriverID)
         {
-            var driver = _driverService.GetDriverById(id);
+            var _listbyid = await _driverService.GetByID(DriverID);
+            return Ok(_listbyid);
+        }
+
+        // POST: api/Bus
+        [HttpPost]
+        public async Task<IActionResult> Create(int DriverID, DriverVM driverVM)
+        {
+            Driver driver = new Driver();
+            driver = _mapper.Map<DriverVM, Driver>(driverVM);
+            driver.DriverId = DriverID;
+            await _driverService.AddAsync(driver);
+            return Ok(driver);
+        }
+
+
+        [HttpPut("{DriverID}")]
+        public async Task<IActionResult> Update(int DriverID, DriverVM driverVM)
+        {
+            var driver = _mapper.Map<DriverVM, Driver>(driverVM);
+            driver.DriverId = DriverID;
+            await _driverService.UpdateAsync(driver);
+            return Ok(driver);
+        }
+
+        // DELETE: api/Bus/5
+        [HttpDelete("{DriverID}")]
+        public async Task<IActionResult> Delete(int DriverID)
+        {
+            var driver = await _driverService.GetByID(DriverID);
             if (driver == null)
                 return NotFound();
 
-            var driverDTO = _mapper.Map<DriverDTO>(driver);
-            return Ok(driverDTO);
-        }
-
-        [HttpPost]
-        public IActionResult Post([FromBody] DriverDTO driverDTO)
-        {
-            if (driverDTO == null)
-            {
-                return BadRequest("Invalid data.");
-            }
-
-            var driver = _mapper.Map<Driver>(driverDTO);
-            _driverService.CreateDriver(driver);
-            return CreatedAtAction(nameof(Get), new { id = driver.DriverId }, driver);
-        }
-
-        [HttpPut("{id}")]
-        public IActionResult Put(long id, [FromBody] DriverDTO driverDto)
-        {
-            if (driverDto == null || id != driverDto.DriverId)
-                return BadRequest("Invalid data.");
-
-            var existingDriver = _driverService.GetDriverById(id);
-            if (existingDriver == null)
-                return NotFound();
-
-            _mapper.Map(driverDto, existingDriver);
-            _driverService.UpdateDriver(existingDriver);
-
-            var updatedDriverDto = _mapper.Map<DriverDTO>(existingDriver);
-
-            return Ok(updatedDriverDto);
-        }
-
-        [HttpDelete("{id}")]
-        public IActionResult Delete(long id)
-        {
-            var existingDriver = _driverService.GetDriverById(id);
-
-            if (existingDriver == null)
-            {
-                return NotFound();
-            }
-
-            _driverService.DeleteDriver(id);
-            return NoContent();
-        }
-
-        [HttpGet("count")]
-        public int Count()
-        {
-            return _driverService.CountDrivers();
+            _driverService.DeleteAsync(DriverID);
+            return Ok();
         }
     }
 }

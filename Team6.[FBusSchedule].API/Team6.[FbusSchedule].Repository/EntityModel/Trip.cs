@@ -5,17 +5,17 @@ namespace Team6._FbusSchedule_.Repository.EntityModel;
 
 public partial class Trip
 {
-    public long TripId { get; set; }
+    public int TripId { get; set; }
 
     public string RouteName { get; set; }
 
     public int? MaxTicket { get; set; }
 
-    public long? RouteId { get; set; }
+    public int? RouteId { get; set; }
 
-    public long? BusId { get; set; }
+    public int? BusId { get; set; }
 
-    public long? DriverId { get; set; }
+    public int? DriverId { get; set; }
 
     public bool? Status { get; set; }
 

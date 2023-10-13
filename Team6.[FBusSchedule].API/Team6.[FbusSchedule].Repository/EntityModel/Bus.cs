@@ -5,7 +5,7 @@ namespace Team6._FbusSchedule_.Repository.EntityModel;
 
 public partial class Bus
 {
-    public long BusId { get; set; }
+    public int BusId { get; set; }
 
     public int BusNumber { get; set; }
 
@@ -17,5 +17,5 @@ public partial class Bus
 
     public bool? Status { get; set; }
 
-    public virtual ICollection<Trip> Trips { get; set; } = new List<Trip>();
+    public virtual ICollection<Trip>? Trips { get; set; } = new List<Trip>();
 }

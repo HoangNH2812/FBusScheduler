@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 using Team6._FbusSchedule_.Repository.AutoMapperEntity;
+using Team6._FbusSchedule_.Repository.EntityModel;
+using Team6._FBusSchedule_.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,14 +27,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 */
+builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("oauth2", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey
+    });
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
+});
 //automapper config
 builder.Services.AddAutoMapper(typeof(MappingProfile));
-
+builder.Services.AddDbContext<PostgresContext>(option =>
+            option.UseNpgsql("User=postgres;Password=mwJvgQqPzjhXwWrb;Server=db.lnyxdixalclqvtxigwnl.supabase.co;Port=5432;Database=postgres"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
