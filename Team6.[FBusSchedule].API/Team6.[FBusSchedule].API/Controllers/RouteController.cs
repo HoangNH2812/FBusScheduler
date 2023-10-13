@@ -35,7 +35,7 @@ namespace Team6._FBusSchedule_.API.Controllers
 
 
         // GET: api/Bus/5
-        [HttpGet("{RouteID}")]
+        [HttpGet("{routeid}")]
         public async Task<IActionResult> ListByID(int RouteID)
         {
             var _listbyid = await _routeService.GetByID(RouteID);
@@ -54,7 +54,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
 
-        [HttpPut("{RouteID}")]
+        [HttpPut("{routeid}")]
         public async Task<IActionResult> Update(int RouteID, RouteVM routeVM)
         {
             var route = _mapper.Map<RouteVM, Route>(routeVM);
@@ -64,7 +64,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // DELETE: api/Bus/5
-        [HttpDelete("{RouteID}")]
+        [HttpDelete("{routeid}")]
         public async Task<IActionResult> Delete(int RouteID)
         {
             var route = await _routeService.GetByID(RouteID);

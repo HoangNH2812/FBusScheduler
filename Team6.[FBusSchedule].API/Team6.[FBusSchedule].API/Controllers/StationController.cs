@@ -29,7 +29,7 @@ namespace Team6._FBusSchedule_.API.Controllers
 
 
         // GET: api/Bus/5
-        [HttpGet("{StationID}")]
+        [HttpGet("{stationid}")]
         public async Task<IActionResult> ListByID(int StationID)
         {
             var _listbyid = await _stationService.GetByID(StationID);
@@ -48,7 +48,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
 
-        [HttpPut("{StationID}")]
+        [HttpPut("{stationid}")]
         public async Task<IActionResult> Update(int StationID, StationVM stationVM)
         {
             Station station = _mapper.Map<StationVM, Station>(stationVM);
@@ -58,7 +58,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // DELETE: api/Bus/5
-        [HttpDelete("{StationID}")]
+        [HttpDelete("{stationid}")]
         public async Task<IActionResult> Delete(int StationID)
         {
             var station = await _stationService.GetByID(StationID);

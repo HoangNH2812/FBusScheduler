@@ -42,6 +42,21 @@ namespace Team6._FbusSchedule_.Repository.AutoMapperEntity
 
             CreateMap<Station, StationVM>();
             CreateMap<StationVM, Station>();
+
+            CreateMap<Ticket, TicketVM>();
+            CreateMap<TicketVM, Ticket>();
+
+            CreateMap<Trip, TripVM>();
+            CreateMap<TripVM, Trip>();
+
+            CreateMap<DetailTrip, DetailTripVM>();
+            CreateMap<DetailTripVM, DetailTrip>();
+
+            CreateMap<Routation, RoutationVM>();
+            CreateMap<RoutationVM, Routation>();
+
+            CreateMap<TicketStation, TicketStationVM>();
+            CreateMap<TicketStationVM, TicketStation>();
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Team6._FbusSchedule_.Repository.EntityModel;
 using Team6._FbusSchedule_.Repository.IRepositories;
+using Team6._FbusSchedule_.Repository.Repositories;
 using Team6._FbusSchedule_.Repository.Repository;
 
 namespace Team6._FbusSchedule_.Repository.Data;
@@ -16,7 +17,11 @@ public interface IUnitOfWork
     IDriverRepository _driverRepository { get; }
     IRouteRepository _routeRepository { get; }
     IStationRepository _stationRepository { get; }
-
+    ITicketRepository _ticketRepository { get; }
+    ITripRepository _tripRepository { get; }
+    IDetailTripRepository _detailTripRepository { get; }
+    IRoutationRepository _routationRepository { get; }
+    ITicketStationRepository _ticketStationRepository { get; }
     Task SaveChangeAsync();
     void Dispose();
 }
@@ -28,11 +33,20 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public IDriverRepository _driverRepository { get; }
     public IRouteRepository _routeRepository { get; }
     public IStationRepository _stationRepository { get; }
-
+    public ITicketRepository _ticketRepository { get; }
+    public ITripRepository _tripRepository { get; }
+    public IDetailTripRepository _detailTripRepository { get; }
+    public IRoutationRepository _routationRepository { get; }
+    public ITicketStationRepository _ticketStationRepository { get; }
     public UnitOfWork(PostgresContext postgresContext
         , IBusRepository busRepository, ICustomerRepository customerRepository
         , IDriverRepository driverRepository, IRouteRepository routeRepository
-        , IStationRepository stationRepository)
+        , IStationRepository stationRepository
+        , ITicketRepository ticketRepository
+        , ITripRepository tripRepository
+        , IDetailTripRepository detailTripRepository
+        , IRoutationRepository routationRepository
+        , ITicketStationRepository ticketStationRepository)
     {
         _postgresContext = postgresContext;
         _busRepository = busRepository;
@@ -40,6 +54,11 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         _driverRepository = driverRepository;
         _routeRepository = routeRepository;
         _stationRepository = stationRepository;
+        _ticketRepository = ticketRepository;
+        _tripRepository = tripRepository;
+        _detailTripRepository = detailTripRepository;
+        _routationRepository = routationRepository;
+        _ticketStationRepository = ticketStationRepository;
     }
 
     //public GenericRepository<Brand, int> BrandRepository

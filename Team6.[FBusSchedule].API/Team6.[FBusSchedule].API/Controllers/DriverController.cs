@@ -30,7 +30,7 @@ namespace Team6._FBusSchedule_.API.Controllers
 
 
         // GET: api/Bus/5
-        [HttpGet("{DriverID}")]
+        [HttpGet("{driverid}")]
         public async Task<IActionResult> ListByID(int DriverID)
         {
             var _listbyid = await _driverService.GetByID(DriverID);
@@ -49,7 +49,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
 
-        [HttpPut("{DriverID}")]
+        [HttpPut("{driverid}")]
         public async Task<IActionResult> Update(int DriverID, DriverVM driverVM)
         {
             var driver = _mapper.Map<DriverVM, Driver>(driverVM);
@@ -59,7 +59,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // DELETE: api/Bus/5
-        [HttpDelete("{DriverID}")]
+        [HttpDelete("{driverid}")]
         public async Task<IActionResult> Delete(int DriverID)
         {
             var driver = await _driverService.GetByID(DriverID);

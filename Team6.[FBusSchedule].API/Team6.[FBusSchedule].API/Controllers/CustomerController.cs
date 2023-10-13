@@ -30,7 +30,7 @@ namespace Team6._FBusSchedule_.API.Controllers
 
 
         // GET: api/Bus/5
-        [HttpGet("{CustomerId}")]
+        [HttpGet("{customerid}")]
         public async Task<IActionResult> ListByID(int CustomerId)
         {
             var _listbyid = await _customerService.GetByID(CustomerId);
@@ -49,7 +49,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
 
-        [HttpPut("{CustomerId}")]
+        [HttpPut("{customerid}")]
         public async Task<IActionResult> Update(int CustomerId, CustomerVM customerVM)
         {
             var cus = _mapper.Map<CustomerVM, Customer>(customerVM);
@@ -59,7 +59,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // DELETE: api/Bus/5
-        [HttpDelete("{CustomerId}")]
+        [HttpDelete("{customerid}")]
         public async Task<IActionResult> Delete(int CustomerId)
         {
             var customer = await _customerService.GetByID(CustomerId);

@@ -2,9 +2,11 @@
 using Team6._FbusSchedule_.Repository.Data;
 using Team6._FbusSchedule_.Repository.EntityModel;
 using Team6._FbusSchedule_.Repository.IRepositories;
+using Team6._FbusSchedule_.Repository.Repositories;
 using Team6._FbusSchedule_.Repository.Repository;
 using Team6._FbusSchedule_.Service.IServices;
 using Team6._FbusSchedule_.Service.Service;
+using Team6._FbusSchedule_.Service.Services;
 
 namespace Team6._FBusSchedule_.API
 {
@@ -33,6 +35,20 @@ namespace Team6._FBusSchedule_.API
             services.AddTransient<IStationRepository, StationRepository>();
             services.AddTransient<IStationService, StationService>();
 
+            services.AddTransient<ITicketRepository, TicketRepository>(); 
+            services.AddTransient<ITicketService, TicketService>();
+
+            services.AddTransient<ITripRepository, TripRepository>();
+            services.AddTransient<ITripService, TripService>();
+
+            services.AddTransient<IDetailTripRepository, DetailTripRepository>();
+            services.AddTransient<IDetailTripService, DetailTripService>();
+
+            services.AddTransient<IRoutationRepository, RoutationRepository>();
+            services.AddTransient<IRoutationService, RoutationService>();
+
+            services.AddTransient<ITicketStationRepository, TicketStationRepository>();
+            services.AddTransient<ITicketStationService, TicketStationService>();
             #endregion
             return services;
         }
