@@ -11,12 +11,12 @@ namespace Team6._FBusSchedule_.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class routationController : ControllerBase
+    public class routationsController : ControllerBase
     {
         private readonly IRoutationService _routeTationService;
         private readonly IMapper _mapper;
 
-        public routationController(IRoutationService routeTationService, IMapper mapper)
+        public routationsController(IRoutationService routeTationService, IMapper mapper)
         {
             _routeTationService = routeTationService;
             _mapper = mapper;
@@ -29,7 +29,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(routes);
         }
 
-        [HttpGet("{routeId}")]
+        [HttpGet("{routeid}")]
         public async Task<IActionResult> GetById(int routeId)
         {
             var route = await _routeTationService.GetByID(routeId);
@@ -45,7 +45,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(routation);
         }
 
-        [HttpPut("{routeId}")]
+        [HttpPut("{routeid}")]
         public async Task<IActionResult> Update(int routeId, [FromBody] RoutationVM routationVM)
         {
             var routation = _mapper.Map<RoutationVM, Routation>(routationVM);
@@ -54,7 +54,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(routation);
         }
 
-        [HttpDelete("{routeId}")]
+        [HttpDelete("{routeid}")]
         public async Task<IActionResult> Delete(int routeId)
         {
             var route = await _routeTationService.GetByID(routeId);

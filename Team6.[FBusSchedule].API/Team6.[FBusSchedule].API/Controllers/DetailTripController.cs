@@ -12,12 +12,12 @@ namespace Team6._FBusSchedule_.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class detaiTripController : ControllerBase
+    public class detailsTripController : ControllerBase
     {
         private readonly IDetailTripService _detailTripService;
         private readonly IMapper _mapper;
 
-        public detaiTripController(IDetailTripService detailTripService, IMapper mapper)
+        public detailsTripController(IDetailTripService detailTripService, IMapper mapper)
         {
             _detailTripService = detailTripService;
             _mapper = mapper;
@@ -30,7 +30,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(detailTripList);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{detailtripid}")]
         public async Task<IActionResult> GetById(int id)
         {
             var detailTrip = await _detailTripService.GetByID(id);
@@ -45,7 +45,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(detailTrip);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{detailtripid}")]
         public async Task<IActionResult> Update(int id, [FromBody] DetailTripVM detailTripVM)
         {
             var existingDetailTrip = await _detailTripService.GetByID(id);
@@ -58,7 +58,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(updatedDetailTrip);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{detailtripid}")]
         public async Task<IActionResult> Delete(int id)
         {
             var detailTrip = await _detailTripService.GetByID(id);

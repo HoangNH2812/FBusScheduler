@@ -10,12 +10,12 @@ namespace Team6._FBusSchedule_.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class driverController : ControllerBase
+    public class driversController : ControllerBase
     {
         private readonly IDriverService _driverService;
         private readonly IMapper _mapper;
 
-        public driverController(IDriverService driverService, IMapper mapper)
+        public driversController(IDriverService driverService, IMapper mapper)
         {
             _driverService = driverService;
             _mapper = mapper;

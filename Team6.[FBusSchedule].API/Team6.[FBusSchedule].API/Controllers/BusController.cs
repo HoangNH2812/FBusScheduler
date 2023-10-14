@@ -11,12 +11,12 @@ namespace Team6._FBusSchedule_.API.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    public class busController : ControllerBase
+    public class busesController : ControllerBase
     {
         private readonly IBusService _busService;
         private readonly IMapper _mapper;
 
-        public busController(IBusService busService, IMapper mapper)
+        public busesController(IBusService busService, IMapper mapper)
         {
             _busService = busService;
             _mapper = mapper;

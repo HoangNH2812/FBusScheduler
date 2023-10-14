@@ -11,12 +11,12 @@ namespace Team6._FBusSchedule_.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ticketStationController : ControllerBase
+    public class ticketsstationController : ControllerBase
     {
         private readonly ITicketStationService _ticketStationService;
         private readonly IMapper _mapper;
 
-        public ticketStationController(ITicketStationService ticketStationService, IMapper mapper)
+        public ticketsstationController(ITicketStationService ticketStationService, IMapper mapper)
         {
             _ticketStationService = ticketStationService;
             _mapper = mapper;
@@ -29,7 +29,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(ticketStationList);
         }
 
-        [HttpGet("{ticketStationId}")]
+        [HttpGet("{ticketstationid}")]
         public async Task<IActionResult> GetById(int ticketStationId)
         {
             var ticketStation = await _ticketStationService.GetByID(ticketStationId);
@@ -45,7 +45,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(ticketStation);
         }
 
-        [HttpPut("{ticketStationId}")]
+        [HttpPut("{ticketstationid}")]
         public async Task<IActionResult> Update(int ticketStationId, [FromBody] TicketStationVM ticketStationVM)
         {
             var ticketStation = _mapper.Map<TicketStationVM, TicketStation>(ticketStationVM);
@@ -54,7 +54,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(ticketStation);
         }
 
-        [HttpDelete("{ticketStationId}")]
+        [HttpDelete("{ticketstationid}")]
         public async Task<IActionResult> Delete(int ticketStationId)
         {
             var ticketStation = await _ticketStationService.GetByID(ticketStationId);

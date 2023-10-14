@@ -10,12 +10,12 @@ namespace Team6._FBusSchedule_.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class customerController : ControllerBase
+    public class customersController : ControllerBase
     {
         private readonly ICustomerService _customerService;
         private readonly IMapper _mapper;
 
-        public customerController(ICustomerService customerService, IMapper mapper)
+        public customersController(ICustomerService customerService, IMapper mapper)
         {
             _customerService = customerService;
             _mapper = mapper;
