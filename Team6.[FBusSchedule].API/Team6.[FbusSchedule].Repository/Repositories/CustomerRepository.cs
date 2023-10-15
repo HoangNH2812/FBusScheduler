@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,10 @@ namespace Team6._FbusSchedule_.Repository.Repository
     {
         public CustomerRepository(PostgresContext context) : base(context)
         {
+        }
+        public async Task<Customer> GetByEmailAsync(string email)
+        {
+            return await dbSet.FirstOrDefaultAsync(c => c.Email == email);
         }
     }
 }

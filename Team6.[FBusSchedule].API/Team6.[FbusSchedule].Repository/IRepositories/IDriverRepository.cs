@@ -10,5 +10,6 @@ namespace Team6._FbusSchedule_.Repository.IRepositories
 {
     public interface IDriverRepository : IGenericRepository<Driver, int>
     {
+        Task<Driver> GetByEmailAsync(string email);
     }
 }

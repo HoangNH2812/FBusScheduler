@@ -89,6 +89,7 @@ public partial class PostgresContext : DbContext
                 .IsRequired()
                 .HasColumnType("character varying");
             entity.Property(e => e.Email).HasColumnType("character varying");
+            entity.Property(e => e.Password).HasColumnType("character varying");
         });
 
         modelBuilder.Entity<DetailTrip>(entity =>
@@ -122,6 +123,13 @@ public partial class PostgresContext : DbContext
 
             entity.Property(e => e.DriverId).HasColumnName("DriverID");
             entity.Property(e => e.DriverName)
+                .IsRequired()
+                .HasColumnType("character varying");
+            entity.Property(e => e.Email)
+                .IsRequired()
+                .HasColumnType("character varying");
+
+            entity.Property(e => e.Password)
                 .IsRequired()
                 .HasColumnType("character varying");
         });

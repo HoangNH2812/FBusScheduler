@@ -10,5 +10,6 @@ namespace Team6._FbusSchedule_.Repository.IRepositories
 {
     public interface ICustomerRepository : IGenericRepository<Customer, int>
     {
+        Task<Customer> GetByEmailAsync(string email);
     }
 }

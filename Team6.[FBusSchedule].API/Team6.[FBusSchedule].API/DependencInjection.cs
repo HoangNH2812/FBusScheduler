@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.EntityFrameworkCore;
 using Team6._FbusSchedule_.Repository.Data;
 using Team6._FbusSchedule_.Repository.EntityModel;
 using Team6._FbusSchedule_.Repository.IRepositories;
@@ -49,6 +50,8 @@ namespace Team6._FBusSchedule_.API
 
             services.AddTransient<ITicketStationRepository, TicketStationRepository>();
             services.AddTransient<ITicketStationService, TicketStationService>();
+
+            services.AddScoped<_FbusSchedule_.Service.IServices.IAuthenticationService, _FbusSchedule_.Service.Services.AuthenticationService>();
             #endregion
             return services;
         }
