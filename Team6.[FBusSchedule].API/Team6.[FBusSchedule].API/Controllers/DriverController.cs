@@ -23,7 +23,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
         // GET: api/Bus
         [HttpGet]
-        public async Task<IActionResult> List(string filter = null, string orderBy = null)
+        public async Task<IActionResult> List(string? filter = null, string? orderBy = null)
         {
             Expression<Func<Driver, bool>> filterExpression = null;
             Func<IQueryable<Driver>, IOrderedQueryable<Driver>> orderByFunc = null;
