@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq.Expressions;
 using Team6._FbusSchedule_.Repository.DTO;
 using Team6._FbusSchedule_.Repository.EntityModel;
 using Team6._FbusSchedule_.Repository.ViewModel;
@@ -23,10 +24,49 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
         // GET: api/Bus
         [HttpGet]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string? filter = null, string? orderBy = null)
         {
-            var _list = await _busService.Get();
-            return Ok(_list);
+            Expression<Func<Bus, bool>> filterExpression = null;
+            Func<IQueryable<Bus>, IOrderedQueryable<Bus>> orderByFunc = null;
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                // Filter by searching for the filter string in multiple columns
+                filterExpression = bus =>
+                    bus.CurrentLocation.Contains(filter.ToUpper()) ||
+                    (bus.BusNumber != null && bus.BusNumber.ToString().Contains(filter));
+            }
+
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                // Check the orderBy parameter and implement ordering logic
+                switch (orderBy.ToLower())
+                {
+                    case "id":
+                        // Order by BusId in ascending order
+                        orderByFunc = query => query.OrderBy(bus => bus.BusId);
+                        break;
+                    case "id_desc":
+                        // Order by BusId in descending order
+                        orderByFunc = query => query.OrderByDescending(bus => bus.BusId);
+                        break;
+                    case "seats":
+                        // Order by Seats in ascending order
+                        orderByFunc = query => query.OrderBy(bus => bus.TotalSeats);
+                        break;
+                    case "seats_desc":
+                        // Order by Seats in descending order
+                        orderByFunc = query => query.OrderByDescending(bus => bus.TotalSeats);
+                        break;
+                    default:
+                        // Default to ordering by BusName in ascending order
+                        orderByFunc = query => query.OrderBy(bus => bus.BusNumber);
+                        break;
+                }
+            }
+
+            var buses = await _busService.Get(filterExpression, orderByFunc);
+            return Ok(buses);
         }
 
 

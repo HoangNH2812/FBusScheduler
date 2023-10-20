@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq.Expressions;
 using Team6._FbusSchedule_.Repository.EntityModel;
 using Team6._FbusSchedule_.Repository.ViewModel;
 using Team6._FbusSchedule_.Service.IServices;
@@ -21,11 +22,50 @@ namespace Team6._FBusSchedule_.API.Controllers
             _mapper = mapper;
         }
         // GET: api/Bus
+        // GET: api/customers
         [HttpGet]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string ?filter = null, string? orderBy = null)
         {
-            var _list = await _customerService.Get();
-            return Ok(_list);
+            Expression<Func<Customer, bool>> filterExpression = null;
+            Func<IQueryable<Customer>, IOrderedQueryable<Customer>> orderByFunc = null;
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                filterExpression = customer =>
+                     customer.CustomerName.Contains(filter) ||
+                     customer.Email.Contains(filter);
+            }
+
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                // Check the orderBy parameter and implement ordering logic
+                switch (orderBy.ToLower())
+                {
+                    case "id":
+                        // Order by CustomerID in ascending order
+                        orderByFunc = query => query.OrderBy(customer => customer.CustomerId);
+                        break;
+                    case "id_desc":
+                        // Order by CustomerID in descending order
+                        orderByFunc = query => query.OrderByDescending(customer => customer.CustomerId);
+                        break;
+                    case "age":
+                        // Order by Age in ascending order
+                        orderByFunc = query => query.OrderBy(customer => customer.Age);
+                        break;
+                    case "age_desc":
+                        // Order by Age in descending order
+                        orderByFunc = query => query.OrderByDescending(customer => customer.Age);
+                        break;
+                    default:
+                        // Default to ordering by CustomerName in ascending order
+                        orderByFunc = query => query.OrderBy(customer => customer.CustomerName);
+                        break;
+                }
+            }
+
+            var customers = await _customerService.Get(filterExpression, orderByFunc);
+            return Ok(customers);
         }
 
 
