@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "997967817995",
+    "project_id": "fbusscheduler",
+    "storage_bucket": "fbusscheduler.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997967817995:android:61724684ec5d39cd31060e",
+        "android_client_info": {
+          "package_name": "com.example.fbusscheduler"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997967817995-7j63f438mlah4k4ticfnkjmfrgrkf8ln.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fbusscheduler",
+            "certificate_hash": "b31c017043ca11defd013c4de2741263003c1ee1"
+          }
+        },
+        {
+          "client_id": "997967817995-7dghtbhc38292osod9a2us2s7ghle712.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzcNS1RtOyP5VRRrzzNTOODzIlSNSjA8s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997967817995-7dghtbhc38292osod9a2us2s7ghle712.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
