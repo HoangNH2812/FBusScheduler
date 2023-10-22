@@ -31,34 +31,31 @@ namespace Team6._FBusSchedule_.API.Controllers
 
             if (!string.IsNullOrEmpty(filter))
             {
+                bool? parsedFilter = TryParseFilter(filter);
                 filterExpression = customer =>
                      customer.CustomerName.Contains(filter) ||
+                     (parsedFilter.HasValue && customer.Status == parsedFilter.Value) ||
+                     customer.Age.ToString().Equals(filter) ||
                      customer.Email.Contains(filter);
             }
 
             if (!string.IsNullOrEmpty(orderBy))
             {
-                // Check the orderBy parameter and implement ordering logic
                 switch (orderBy.ToLower())
                 {
                     case "id":
-                        // Order by CustomerID in ascending order
                         orderByFunc = query => query.OrderBy(customer => customer.CustomerId);
                         break;
                     case "id_desc":
-                        // Order by CustomerID in descending order
                         orderByFunc = query => query.OrderByDescending(customer => customer.CustomerId);
                         break;
                     case "age":
-                        // Order by Age in ascending order
                         orderByFunc = query => query.OrderBy(customer => customer.Age);
                         break;
                     case "age_desc":
-                        // Order by Age in descending order
                         orderByFunc = query => query.OrderByDescending(customer => customer.Age);
                         break;
                     default:
-                        // Default to ordering by CustomerName in ascending order
                         orderByFunc = query => query.OrderBy(customer => customer.CustomerName);
                         break;
                 }
@@ -67,10 +64,17 @@ namespace Team6._FBusSchedule_.API.Controllers
             var customers = await _customerService.Get(filterExpression, orderByFunc);
             return Ok(customers);
         }
-
+        private bool? TryParseFilter(string filter)
+        {
+            if (bool.TryParse(filter, out bool result))
+            {
+                return result;
+            }
+            return null;
+        }
 
         // GET: api/Bus/5
-        [HttpGet("{customerid}")]
+        [HttpGet("customerid")]
         public async Task<IActionResult> ListByID(int CustomerId)
         {
             var _listbyid = await _customerService.GetByID(CustomerId);
@@ -89,7 +93,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
 
-        [HttpPut("{customerid}")]
+        [HttpPut("customerid")]
         public async Task<IActionResult> Update(int CustomerId, CustomerVM customerVM)
         {
             var cus = _mapper.Map<CustomerVM, Customer>(customerVM);
@@ -99,7 +103,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // DELETE: api/Bus/5
-        [HttpDelete("{customerid}")]
+        [HttpDelete("customerid")]
         public async Task<IActionResult> Delete(int CustomerId)
         {
             var customer = await _customerService.GetByID(CustomerId);

@@ -67,5 +67,11 @@ namespace Team6._FbusSchedule_.Service.Services
             _unitOfWork._ticketRepository.Update(entityToUpdate);
             await _unitOfWork.SaveChangeAsync();
         }
+        public async Task<int> CountByTripId(int tripId)
+        {
+            // Triển khai đếm số lượng vé dựa trên tripId ở đây
+            int ticketCount = await _unitOfWork._ticketRepository.CountByTripId(tripId);
+            return ticketCount;
+        }
     }
 }

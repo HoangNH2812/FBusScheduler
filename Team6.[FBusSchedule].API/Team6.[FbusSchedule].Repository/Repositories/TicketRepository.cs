@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,13 @@ namespace Team6._FbusSchedule_.Repository.Repositories
     {
         public TicketRepository(PostgresContext context) : base(context)
         {
+        }
+
+        public Task<int> CountByTripId(int tripId)
+        {
+            return  context.Tickets
+            .Where(t => t.TripId == tripId)
+            .CountAsync();
         }
     }
 }

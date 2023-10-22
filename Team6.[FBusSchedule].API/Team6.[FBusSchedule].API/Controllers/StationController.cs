@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 using Team6._FbusSchedule_.Repository.EntityModel;
 using Team6._FbusSchedule_.Repository.ViewModel;
 using Team6._FbusSchedule_.Service.IServices;
@@ -21,15 +22,53 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
         // GET: api/Bus
         [HttpGet]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string? filter = null, string? orderBy = null)
         {
-            var _list = await _stationService.Get();
-            return Ok(_list);
+            Expression<Func<Station, bool>> filterExpression = null;
+            Func<IQueryable<Station>, IOrderedQueryable<Station>> orderByFunc = null;
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                bool? parsedFilter = TryParseFilter(filter);
+                filterExpression = station =>
+                     station.StationName.Contains(filter) ||
+                     station.Location.Contains(filter) ||
+                     (parsedFilter.HasValue && station.StationStatus == parsedFilter.Value);
+            }
+
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                switch (orderBy.ToLower())
+                {
+                    case "id":
+                        orderByFunc = query => query.OrderBy(station => station.StationId);
+                        break;
+                    case "id_desc":
+                        orderByFunc = query => query.OrderByDescending(station => station.StationId);
+                        break;
+                    // Thêm các trường hợp orderBy khác ở đây
+                    default:
+                        orderByFunc = query => query.OrderBy(station => station.StationName);
+                        break;
+                }
+            }
+
+            var stations = await _stationService.Get(filterExpression, orderByFunc);
+            return Ok(stations);
+        }
+
+        private bool? TryParseFilter(string filter)
+        {
+            if (bool.TryParse(filter, out bool result))
+            {
+                return result;
+            }
+            return null;
         }
 
 
         // GET: api/Bus/5
-        [HttpGet("{stationid}")]
+        [HttpGet("stationid")]
         public async Task<IActionResult> ListByID(int StationID)
         {
             var _listbyid = await _stationService.GetByID(StationID);
@@ -48,7 +87,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
 
-        [HttpPut("{stationid}")]
+        [HttpPut("stationid")]
         public async Task<IActionResult> Update(int StationID, StationVM stationVM)
         {
             Station station = _mapper.Map<StationVM, Station>(stationVM);
@@ -58,7 +97,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // DELETE: api/Bus/5
-        [HttpDelete("{stationid}")]
+        [HttpDelete("stationid")]
         public async Task<IActionResult> Delete(int StationID)
         {
             var station = await _stationService.GetByID(StationID);

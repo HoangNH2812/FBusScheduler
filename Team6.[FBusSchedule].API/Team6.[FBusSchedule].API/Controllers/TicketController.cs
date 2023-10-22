@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Team6._FbusSchedule_.Repository.DTO;
 using Team6._FbusSchedule_.Repository.EntityModel;
@@ -24,13 +25,43 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string? filter = null, string? orderBy = null)
         {
-            var ticketList = await _ticketService.Get();
-            return Ok(ticketList);
+            Expression<Func<Ticket, bool>> filterExpression = null;
+            Func<IQueryable<Ticket>, IOrderedQueryable<Ticket>> orderByFunc = null;
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                filterExpression = ticket =>
+                     ticket.TicketId.ToString().Contains(filter) ||
+                     ticket.CustomerName.Contains(filter) ||
+                     ticket.CustomerId.ToString().Contains(filter) ||
+                     ticket.Comment.Contains(filter) ||
+                     ticket.Status.ToString().Contains(filter) ||
+                     ticket.TripId.ToString().Contains(filter);
+            }
+
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                switch (orderBy.ToLower())
+                {
+                    case "id":
+                        orderByFunc = query => query.OrderBy(ticket => ticket.TicketId);
+                        break;
+                    case "id_desc":
+                        orderByFunc = query => query.OrderByDescending(ticket => ticket.TicketId);
+                        break;
+                    default:
+                        orderByFunc = query => query.OrderBy(ticket => ticket.TicketId);
+                        break;
+                }
+            }
+
+            var tickets = await _ticketService.Get(filterExpression, orderByFunc);
+            return Ok(tickets);
         }
 
-        [HttpGet("{ticketid}")]
+        [HttpGet("ticketid")]
         public async Task<IActionResult> ListByID(int ticketId)
         {
             var ticket = await _ticketService.GetByID(ticketId);
@@ -46,7 +77,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(ticket);
         }
 
-        [HttpPut("{ticketid}")]
+        [HttpPut("ticketid")]
         public async Task<IActionResult> Update(int ticketId, [FromBody] TicketVM ticketVM)
         {
             var ticket = _mapper.Map<TicketVM, Ticket>(ticketVM);
@@ -55,7 +86,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(ticket);
         }
 
-        [HttpDelete("{ticketid}")]
+        [HttpDelete("ticketid")]
         public async Task<IActionResult> Delete(int ticketId)
         {
             var ticket = await _ticketService.GetByID(ticketId);
@@ -65,5 +96,13 @@ namespace Team6._FBusSchedule_.API.Controllers
             await _ticketService.DeleteAsync(ticketId);
             return Ok();
         }
+        [HttpGet("tripid")]
+        public async Task<IActionResult> CountByTripId(int tripId)
+        {
+            int ticketCount = await _ticketService.CountByTripId(tripId);
+
+            return Ok(ticketCount);
+        }
+
     }
 }

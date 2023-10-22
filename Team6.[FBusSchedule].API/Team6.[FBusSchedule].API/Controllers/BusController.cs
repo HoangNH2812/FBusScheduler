@@ -31,35 +31,33 @@ namespace Team6._FBusSchedule_.API.Controllers
 
             if (!string.IsNullOrEmpty(filter))
             {
+
+                bool? parsedFilter = TryParseFilter(filter);
                 // Filter by searching for the filter string in multiple columns
                 filterExpression = bus =>
                     bus.CurrentLocation.Contains(filter.ToUpper()) ||
+                    (parsedFilter.HasValue && bus.Status == parsedFilter.Value) ||
                     (bus.BusNumber != null && bus.BusNumber.ToString().Contains(filter));
             }
 
             if (!string.IsNullOrEmpty(orderBy))
             {
-                // Check the orderBy parameter and implement ordering logic
+
                 switch (orderBy.ToLower())
                 {
                     case "id":
-                        // Order by BusId in ascending order
                         orderByFunc = query => query.OrderBy(bus => bus.BusId);
                         break;
                     case "id_desc":
-                        // Order by BusId in descending order
                         orderByFunc = query => query.OrderByDescending(bus => bus.BusId);
                         break;
                     case "seats":
-                        // Order by Seats in ascending order
                         orderByFunc = query => query.OrderBy(bus => bus.TotalSeats);
                         break;
                     case "seats_desc":
-                        // Order by Seats in descending order
                         orderByFunc = query => query.OrderByDescending(bus => bus.TotalSeats);
                         break;
                     default:
-                        // Default to ordering by BusName in ascending order
                         orderByFunc = query => query.OrderBy(bus => bus.BusNumber);
                         break;
                 }
@@ -69,9 +67,17 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(buses);
         }
 
+        private bool? TryParseFilter(string filter)
+        {
+            if (bool.TryParse(filter, out bool result))
+            {
+                return result;
+            }
+            return null;
+        }
 
         // GET: api/Bus/5
-        [HttpGet("{busid}")]
+        [HttpGet("busid")]
         public async Task<IActionResult> ListByID(int BusId)
         {
             var _listbyid = await _busService.GetByID(BusId);
@@ -89,7 +95,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(bus);
         }
 
-        [HttpPut("{busid}")]
+        [HttpPut("busid")]
         public async Task<IActionResult> Update(int BusId, [FromBody] BusVM busVM)
         {
             var bus = _mapper.Map<BusVM,Bus>(busVM);
@@ -98,7 +104,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(bus);
         }
 
-        [HttpDelete("{busid}")]
+        [HttpDelete("busid")]
         public async Task<IActionResult> Delete(int BusId)
         {
             var bus = await _busService.GetByID(BusId);

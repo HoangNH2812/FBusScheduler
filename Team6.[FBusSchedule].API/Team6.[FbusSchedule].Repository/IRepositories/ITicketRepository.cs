@@ -8,7 +8,8 @@ using Team6._FbusSchedule_.Repository.EntityModel;
 
 namespace Team6._FbusSchedule_.Repository.IRepositories
 {
-    public interface ITicketRepository: IGenericRepository<Ticket, int>
+    public interface ITicketRepository : IGenericRepository<Ticket, int>
     {
+        Task<int> CountByTripId(int tripId);
     }
 }

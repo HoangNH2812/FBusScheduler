@@ -30,36 +30,31 @@ namespace Team6._FBusSchedule_.API.Controllers
 
             if (!string.IsNullOrEmpty(filter))
             {
-                // Filter by searching for the filter string in multiple columns
+                bool? parsedFilter = TryParseFilter(filter);
                 filterExpression = driver =>
                     driver.DriverName.Contains(filter) ||
                     driver.Email.Contains(filter) ||
+                    (parsedFilter.HasValue && driver.Status == parsedFilter.Value) ||
                     (driver.DriverPhone != null && driver.DriverPhone.Contains(filter));
             }
 
             if (!string.IsNullOrEmpty(orderBy))
             {
-                // Check the orderBy parameter and implement ordering logic
                 switch (orderBy.ToLower())
                 {
                     case "id":
-                        // Order by DriverId in ascending order
                         orderByFunc = query => query.OrderBy(driver => driver.DriverId);
                         break;
                     case "id_desc":
-                        // Order by DriverId in descending order
                         orderByFunc = query => query.OrderByDescending(driver => driver.DriverId);
                         break;
                     case "license":
-                        // Order by License in ascending order
                         orderByFunc = query => query.OrderBy(driver => driver.License);
                         break;
                     case "license_desc":
-                        // Order by License in descending order
                         orderByFunc = query => query.OrderByDescending(driver => driver.License);
                         break;
                     default:
-                        // Default to ordering by DriverName in ascending order
                         orderByFunc = query => query.OrderBy(driver => driver.DriverName);
                         break;
                 }
@@ -68,10 +63,17 @@ namespace Team6._FBusSchedule_.API.Controllers
             var drivers = await _driverService.Get(filterExpression, orderByFunc);
             return Ok(drivers);
         }
-
+        private bool? TryParseFilter(string filter)
+        {
+            if (bool.TryParse(filter, out bool result))
+            {
+                return result;
+            }
+            return null;
+        }
 
         // GET: api/Bus/5
-        [HttpGet("{driverid}")]
+        [HttpGet("driverid")]
         public async Task<IActionResult> ListByID(int DriverID)
         {
             var _listbyid = await _driverService.GetByID(DriverID);
@@ -90,7 +92,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
 
-        [HttpPut("{driverid}")]
+        [HttpPut("driverid")]
         public async Task<IActionResult> Update(int DriverID, DriverVM driverVM)
         {
             var driver = _mapper.Map<DriverVM, Driver>(driverVM);
@@ -100,7 +102,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // DELETE: api/Bus/5
-        [HttpDelete("{driverid}")]
+        [HttpDelete("driverid")]
         public async Task<IActionResult> Delete(int DriverID)
         {
             var driver = await _driverService.GetByID(DriverID);

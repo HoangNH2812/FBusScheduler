@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Team6._FbusSchedule_.Repository.DTO;
 using Team6._FbusSchedule_.Repository.EntityModel;
@@ -24,13 +25,52 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string? filter = null, string? orderBy = null)
         {
-            var tripList = await _tripService.Get();
-            return Ok(tripList);
-        }
+            Expression<Func<Trip, bool>> filterExpression = null;
+            Func<IQueryable<Trip>, IOrderedQueryable<Trip>> orderByFunc = null;
 
-        [HttpGet("{tripid}")]
+            if (!string.IsNullOrEmpty(filter))
+            {
+                bool? parsedFilter = TryParseFilter(filter);
+                filterExpression = trip =>
+                    trip.TripId.ToString().Contains(filter) ||
+                    trip.RouteName.Contains(filter) ||
+                    trip.RouteId.ToString().Contains(filter) ||
+                    trip.BusId.ToString().Contains(filter) ||
+                    trip.DriverId.ToString().Contains(filter) ||
+                    (parsedFilter.HasValue && trip.Status == parsedFilter.Value) ||
+                    trip.MaxTicket.ToString().Contains(filter);
+            }
+
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                switch (orderBy.ToLower())
+                {
+                    case "id":
+                        orderByFunc = query => query.OrderBy(trip => trip.TripId);
+                        break;
+                    case "id_desc":
+                        orderByFunc = query => query.OrderByDescending(trip => trip.TripId);
+                        break;
+                    default:
+                        orderByFunc = query => query.OrderBy(trip => trip.TripId);
+                        break;
+                }
+            }
+
+            var trips = await _tripService.Get(filterExpression, orderByFunc);
+            return Ok(trips);
+        }
+        private bool? TryParseFilter(string filter)
+        {
+            if (bool.TryParse(filter, out bool result))
+            {
+                return result;
+            }
+            return null;
+        }
+        [HttpGet("tripid")]
         public async Task<IActionResult> ListByID(int tripId)
         {
             var trip = await _tripService.GetByID(tripId);
@@ -46,7 +86,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(trip);
         }
 
-        [HttpPut("{tripid}")]
+        [HttpPut("tripid")]
         public async Task<IActionResult> Update(int tripId, [FromBody] TripVM tripVM)
         {
             var trip = _mapper.Map<TripVM, Trip>(tripVM);
@@ -55,7 +95,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(trip);
         }
 
-        [HttpDelete("{tripid}")]
+        [HttpDelete("tripid")]
         public async Task<IActionResult> Delete(int tripId)
         {
             var trip = await _tripService.GetByID(tripId);

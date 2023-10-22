@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Team6._FbusSchedule_.Repository.EntityModel;
 
@@ -16,6 +17,6 @@ public partial class Bus
     public int? TotalSeats { get; set; }
 
     public bool? Status { get; set; }
-
+    [JsonIgnore]
     public virtual ICollection<Trip>? Trips { get; set; } = new List<Trip>();
 }

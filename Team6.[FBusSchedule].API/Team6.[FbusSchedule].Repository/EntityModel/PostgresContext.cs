@@ -195,6 +195,7 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.ArrivalTime).HasColumnType("timestamp without time zone");
             entity.Property(e => e.Comment).HasColumnType("character varying");
             entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+            entity.Property(e => e.TripId).HasColumnName("TripID");
             entity.Property(e => e.CustomerName)
                 .IsRequired()
                 .HasColumnType("character varying");

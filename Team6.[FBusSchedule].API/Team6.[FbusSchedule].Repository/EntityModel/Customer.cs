@@ -17,5 +17,6 @@ public partial class Customer
     [JsonIgnore]
     public string Password { get; set; }
     public bool? Status { get; set; }
+    [JsonIgnore]
     public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
 }
