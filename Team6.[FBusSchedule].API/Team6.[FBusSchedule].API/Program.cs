@@ -46,20 +46,37 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.AddDbContext<PostgresContext>(option =>
             option.UseNpgsql("User=postgres;Password=mwJvgQqPzjhXwWrb;Server=db.lnyxdixalclqvtxigwnl.supabase.co;Port=5432;Database=postgres"));
+builder.Services.Configure<AppSetting>(builder.Configuration.GetSection("AppSetting"));
+builder.Services.AddInfrastructure(builder.Configuration);
+var secretKey = builder.Configuration.GetSection("AppSetting:SecretKey").Value!;
+var secretKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
+{
+    opt.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(secretKeyBytes),
+        ClockSkew = TimeSpan.Zero
+    };
+});
 var app = builder.Build();
+{
+    // Configure the HTTP request pipeline.
 
-// Configure the HTTP request pipeline.
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+    app.UseHttpsRedirection();
 
-app.UseHttpsRedirection();
+    app.UseAuthentication();
 
-app.UseAuthentication();
+    app.UseAuthorization();
 
-app.UseAuthorization();
-
-app.MapControllers();
-
+    app.MapControllers();
+}
 /*app.Run("http://0.0.0.0:80");*/
 app.Run();
