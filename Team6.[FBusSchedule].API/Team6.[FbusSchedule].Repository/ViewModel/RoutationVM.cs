@@ -14,7 +14,7 @@ public partial class RoutationVM
 
     public DateTime? DefaultDuration { get; set; }
 
-    public virtual RouteVM Route { get; set; }
+    //public virtual RouteVM Route { get; set; }
 
-    public virtual StationVM Station { get; set; }
+    //public virtual StationVM Station { get; set; }
 }

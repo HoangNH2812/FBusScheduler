@@ -25,7 +25,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             _ticketStationService = ticketStationService;
             _mapper = mapper;
         }
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task<IActionResult> List(int page=1)
         {
@@ -34,7 +34,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(pageticketStationList);
         }
        
-        [Authorize]     
+        //[Authorize]     
         [HttpGet("ticketstationid")]
         public async Task<IActionResult> GetById(int ticketStationId)
         {
@@ -42,7 +42,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(ticketStation);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(int ticketStationId, TicketStationVM ticketStationVM)
         {
@@ -52,7 +52,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(ticketStation);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut("ticketstationid")]
         public async Task<IActionResult> Update(int ticketStationId, [FromBody] TicketStationVM ticketStationVM)
         {
@@ -62,7 +62,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(ticketStation);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpDelete("ticketstationid")]
         public async Task<IActionResult> Delete(int ticketStationId)
         {

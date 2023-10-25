@@ -16,6 +16,6 @@ public partial class TicketVM
     public int? Status { get; set; }
 
     public int? CustomerId { get; set; }
-
-    public virtual CustomerVM Customer { get; set; }
+    public int? TripId { get; set; }
+    //public virtual CustomerVM Customer { get; set; }
 }

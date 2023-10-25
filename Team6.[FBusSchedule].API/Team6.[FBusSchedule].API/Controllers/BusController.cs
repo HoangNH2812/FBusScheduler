@@ -83,7 +83,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // GET: api/Bus/5
-        [Authorize]
+        //[Authorize]
         [HttpGet("busid")]
         public async Task<IActionResult> ListByID(int BusId)
         {
@@ -92,7 +92,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // POST: api/Bus
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(int BusID,BusVM busVM)
         {
@@ -103,7 +103,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(bus);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut("busid")]
         public async Task<IActionResult> Update(int BusId, [FromBody] BusVM busVM)
         {
@@ -113,7 +113,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(bus);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpDelete("busid")]
         public async Task<IActionResult> Delete(int BusId)
         {

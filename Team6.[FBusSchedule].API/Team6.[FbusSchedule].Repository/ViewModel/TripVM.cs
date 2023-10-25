@@ -17,11 +17,11 @@ public partial class TripVM
 
     public bool? Status { get; set; }
 
-    public virtual BusVM Bus { get; set; }
+    //public virtual BusVM Bus { get; set; }
 
-    public virtual DetailTripVM DetailTrip { get; set; }
+    //public virtual DetailTripVM DetailTrip { get; set; }
 
-    public virtual DriverVM Driver { get; set; }
+    //public virtual DriverVM Driver { get; set; }
 
-    public virtual RouteVM Route { get; set; }
+    //public virtual RouteVM Route { get; set; }
 }

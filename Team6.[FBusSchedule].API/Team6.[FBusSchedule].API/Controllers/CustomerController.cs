@@ -26,7 +26,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         // GET: api/Bus
         // GET: api/customers
 
-        [Authorize]
+        //[Authorize]
         [HttpGet]
         public async Task<IActionResult> List(string ?filter = null, string? orderBy = null, int page = 1)
         {
@@ -80,7 +80,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // GET: api/Bus/5
-        [Authorize]
+        //[Authorize]
         [HttpGet("customerid")]
         public async Task<IActionResult> ListByID(int CustomerId)
         {
@@ -89,7 +89,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // POST: api/Bus
-        [Authorize]
+        //[Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(int CusID,CustomerVM cusVM)
         {
@@ -100,7 +100,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(cus);
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPut("customerid")]
         public async Task<IActionResult> Update(int CustomerId, CustomerVM customerVM)
         {
@@ -111,7 +111,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // DELETE: api/Bus/5
-        [Authorize]
+        //[Authorize]
         [HttpDelete("customerid")]
         public async Task<IActionResult> Delete(int CustomerId)
         {
