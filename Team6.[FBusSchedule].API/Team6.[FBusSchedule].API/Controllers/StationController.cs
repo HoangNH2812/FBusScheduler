@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Drawing.Printing;
 using System.Linq.Expressions;
 using Team6._FbusSchedule_.Repository.EntityModel;
 using Team6._FbusSchedule_.Repository.ViewModel;
@@ -14,6 +17,7 @@ namespace Team6._FBusSchedule_.API.Controllers
     {
         private readonly IStationService _stationService;
         private readonly IMapper _mapper;
+        int PAGE_SIZE = 3;
 
         public stationsController(IStationService stationService, IMapper mapper)
         {
@@ -21,8 +25,9 @@ namespace Team6._FBusSchedule_.API.Controllers
             _mapper = mapper;
         }
         // GET: api/Bus
+        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> List(string? filter = null, string? orderBy = null)
+        public async Task<IActionResult> List(string? filter = null, string? orderBy = null, int page = 1)
         {
             Expression<Func<Station, bool>> filterExpression = null;
             Func<IQueryable<Station>, IOrderedQueryable<Station>> orderByFunc = null;
@@ -54,7 +59,8 @@ namespace Team6._FBusSchedule_.API.Controllers
             }
 
             var stations = await _stationService.Get(filterExpression, orderByFunc);
-            return Ok(stations);
+            var pagestations = PaginatedList<Station>.Create(stations, page, PAGE_SIZE);
+            return Ok(pagestations);
         }
 
         private bool? TryParseFilter(string filter)
@@ -68,6 +74,7 @@ namespace Team6._FBusSchedule_.API.Controllers
 
 
         // GET: api/Bus/5
+        [Authorize]
         [HttpGet("stationid")]
         public async Task<IActionResult> ListByID(int StationID)
         {
@@ -76,6 +83,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // POST: api/Bus
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(int StationID, StationVM stationVM)
         {
@@ -86,7 +94,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(station);
         }
 
-
+        [Authorize]
         [HttpPut("stationid")]
         public async Task<IActionResult> Update(int StationID, StationVM stationVM)
         {
@@ -97,6 +105,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // DELETE: api/Bus/5
+        [Authorize]
         [HttpDelete("stationid")]
         public async Task<IActionResult> Delete(int StationID)
         {

@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Team6._FbusSchedule_.Repository.DTO;
@@ -17,6 +20,7 @@ namespace Team6._FBusSchedule_.API.Controllers
     {
         private readonly IRoutationService _routeTationService;
         private readonly IMapper _mapper;
+        int PAGE_SIZE = 3;
 
         public routationsController(IRoutationService routeTationService, IMapper mapper)
         {
@@ -24,8 +28,9 @@ namespace Team6._FBusSchedule_.API.Controllers
             _mapper = mapper;
         }
 
+        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> List(string? filter = null, string? orderBy = null)
+        public async Task<IActionResult> List(string? filter = null, string? orderBy = null, int page = 1)
         {
             Expression<Func<Routation, bool>> filterExpression = null;
             Func<IQueryable<Routation>, IOrderedQueryable<Routation>> orderByFunc = null;
@@ -57,10 +62,11 @@ namespace Team6._FBusSchedule_.API.Controllers
             }
 
             var routations = await _routeTationService.Get(filterExpression, orderByFunc);
-            return Ok(routations);
+            var pageroutations = PaginatedList<Routation>.Create(routations, page, PAGE_SIZE);
+            return Ok(pageroutations);
         }
 
-
+        [Authorize]
         [HttpGet("routeid")]
         public async Task<IActionResult> GetById(int routeId)
         {
@@ -68,6 +74,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(route);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(int routeId, RoutationVM routationVM)
         {
@@ -77,6 +84,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(routation);
         }
 
+        [Authorize]
         [HttpPut("routeid")]
         public async Task<IActionResult> Update(int routeId, [FromBody] RoutationVM routationVM)
         {
@@ -86,6 +94,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(routation);
         }
 
+        [Authorize]
         [HttpDelete("routeid")]
         public async Task<IActionResult> Delete(int routeId)
         {

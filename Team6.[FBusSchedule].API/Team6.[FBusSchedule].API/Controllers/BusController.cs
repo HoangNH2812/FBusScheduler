@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
+using System.Drawing.Printing;
 using System.Linq.Expressions;
 using Team6._FbusSchedule_.Repository.DTO;
 using Team6._FbusSchedule_.Repository.EntityModel;
@@ -23,11 +26,13 @@ namespace Team6._FBusSchedule_.API.Controllers
             _mapper = mapper;
         }
         // GET: api/Bus
+        //[Authorize]
         [HttpGet]
-        public async Task<IActionResult> List(string? filter = null, string? orderBy = null)
+        public async Task<IActionResult> List(string? filter = null, string? orderBy = null, int page = 1)
         {
             Expression<Func<Bus, bool>> filterExpression = null;
             Func<IQueryable<Bus>, IOrderedQueryable<Bus>> orderByFunc = null;
+            int PAGE_SIZE = 3;
 
             if (!string.IsNullOrEmpty(filter))
             {
@@ -64,7 +69,8 @@ namespace Team6._FBusSchedule_.API.Controllers
             }
 
             var buses = await _busService.Get(filterExpression, orderByFunc);
-            return Ok(buses);
+            var pagebuses = PaginatedList<Bus>.Create(buses, page, PAGE_SIZE);
+            return Ok(pagebuses);
         }
 
         private bool? TryParseFilter(string filter)
@@ -77,6 +83,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // GET: api/Bus/5
+        [Authorize]
         [HttpGet("busid")]
         public async Task<IActionResult> ListByID(int BusId)
         {
@@ -85,6 +92,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // POST: api/Bus
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(int BusID,BusVM busVM)
         {
@@ -95,6 +103,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(bus);
         }
 
+        [Authorize]
         [HttpPut("busid")]
         public async Task<IActionResult> Update(int BusId, [FromBody] BusVM busVM)
         {
@@ -104,6 +113,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(bus);
         }
 
+        [Authorize]
         [HttpDelete("busid")]
         public async Task<IActionResult> Delete(int BusId)
         {

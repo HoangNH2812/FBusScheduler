@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Team6._FbusSchedule_.Repository.DTO;
@@ -17,6 +20,7 @@ namespace Team6._FBusSchedule_.API.Controllers
     {
         private readonly ITicketService _ticketService;
         private readonly IMapper _mapper;
+        int PAGE_SIZE = 3;
 
         public ticketsController(ITicketService ticketService, IMapper mapper)
         {
@@ -24,8 +28,9 @@ namespace Team6._FBusSchedule_.API.Controllers
             _mapper = mapper;
         }
 
+        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> List(string? filter = null, string? orderBy = null)
+        public async Task<IActionResult> List(string? filter = null, string? orderBy = null, int page = 1)
         {
             Expression<Func<Ticket, bool>> filterExpression = null;
             Func<IQueryable<Ticket>, IOrderedQueryable<Ticket>> orderByFunc = null;
@@ -58,9 +63,11 @@ namespace Team6._FBusSchedule_.API.Controllers
             }
 
             var tickets = await _ticketService.Get(filterExpression, orderByFunc);
-            return Ok(tickets);
+            var pagetickets = PaginatedList<Ticket>.Create(tickets, page, PAGE_SIZE);
+            return Ok(pagetickets);
         }
 
+        [Authorize]
         [HttpGet("ticketid")]
         public async Task<IActionResult> ListByID(int ticketId)
         {
@@ -68,6 +75,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(ticket);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(int ticketId, TicketVM ticketVM)
         {
@@ -77,6 +85,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(ticket);
         }
 
+        [Authorize]
         [HttpPut("ticketid")]
         public async Task<IActionResult> Update(int ticketId, [FromBody] TicketVM ticketVM)
         {
@@ -86,6 +95,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(ticket);
         }
 
+        [Authorize]
         [HttpDelete("ticketid")]
         public async Task<IActionResult> Delete(int ticketId)
         {
@@ -96,6 +106,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             await _ticketService.DeleteAsync(ticketId);
             return Ok();
         }
+        [Authorize]
         [HttpGet("tripid")]
         public async Task<IActionResult> CountByTripId(int tripId)
         {

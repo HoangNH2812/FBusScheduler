@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Team6._FbusSchedule_.Repository.DTO;
@@ -17,6 +20,7 @@ namespace Team6._FBusSchedule_.API.Controllers
     {
         private readonly ITripService _tripService;
         private readonly IMapper _mapper;
+        int PAGE_SIZE = 3;
 
         public tripsController(ITripService tripService, IMapper mapper)
         {
@@ -24,8 +28,9 @@ namespace Team6._FBusSchedule_.API.Controllers
             _mapper = mapper;
         }
 
+        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> List(string? filter = null, string? orderBy = null)
+        public async Task<IActionResult> List(string? filter = null, string? orderBy = null,int page=1)
         {
             Expression<Func<Trip, bool>> filterExpression = null;
             Func<IQueryable<Trip>, IOrderedQueryable<Trip>> orderByFunc = null;
@@ -60,7 +65,8 @@ namespace Team6._FBusSchedule_.API.Controllers
             }
 
             var trips = await _tripService.Get(filterExpression, orderByFunc);
-            return Ok(trips);
+            var pagetrips = PaginatedList<Trip>.Create(trips, page, PAGE_SIZE);
+            return Ok(pagetrips);
         }
         private bool? TryParseFilter(string filter)
         {
@@ -70,6 +76,8 @@ namespace Team6._FBusSchedule_.API.Controllers
             }
             return null;
         }
+
+        [Authorize]
         [HttpGet("tripid")]
         public async Task<IActionResult> ListByID(int tripId)
         {
@@ -77,6 +85,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(trip);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(int tripId, TripVM tripVM)
         {
@@ -86,6 +95,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(trip);
         }
 
+        [Authorize]
         [HttpPut("tripid")]
         public async Task<IActionResult> Update(int tripId, [FromBody] TripVM tripVM)
         {
@@ -95,6 +105,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(trip);
         }
 
+        [Authorize]
         [HttpDelete("tripid")]
         public async Task<IActionResult> Delete(int tripId)
         {
