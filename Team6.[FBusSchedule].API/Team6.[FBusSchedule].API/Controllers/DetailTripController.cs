@@ -28,7 +28,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             _mapper = mapper;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> List(string? filter = null, string? orderBy = null, int page=1)
         {
@@ -80,7 +80,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(pagedetailTripList);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet("detailtripid")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -88,7 +88,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(detailTrip);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] DetailTripVM detailTripVM)
         {
@@ -97,7 +97,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(detailTrip);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPut("detailtripid")]
         public async Task<IActionResult> Update(int id, [FromBody] DetailTripVM detailTripVM)
         {
@@ -111,7 +111,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(updatedDetailTrip);
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpDelete("detailtripid")]
         public async Task<IActionResult> Delete(int id)
         {
