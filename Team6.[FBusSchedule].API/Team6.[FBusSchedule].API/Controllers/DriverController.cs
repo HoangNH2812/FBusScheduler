@@ -88,7 +88,6 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         // POST: api/Bus
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(int DriverID, DriverVM driverVM)
         {
