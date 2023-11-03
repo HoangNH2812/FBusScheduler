@@ -121,5 +121,27 @@ namespace Team6._FBusSchedule_.API.Controllers
             _driverService.DeleteAsync(DriverID);
             return Ok();
         }
+        // GET: api/driver/byemail
+        [Authorize]
+        [HttpGet("byemail")]
+        public async Task<IActionResult> GetDriverByEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Email is required");
+            }
+
+            Expression<Func<Driver, bool>> filterExpression = driver =>
+                driver.Email.ToLower() == email.ToLower();
+
+            var driver = await _driverService.Get(filterExpression, null);
+
+            if (driver == null)
+            {
+                return NotFound("Customer not found");
+            }
+
+            return Ok(driver);
+        }
     }
 }

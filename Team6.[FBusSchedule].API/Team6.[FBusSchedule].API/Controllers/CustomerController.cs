@@ -121,5 +121,28 @@ namespace Team6._FBusSchedule_.API.Controllers
             _customerService.DeleteAsync(CustomerId);
             return Ok();
         }
+        // GET: api/customers/byemail
+        [Authorize]
+        [HttpGet("byemail")]
+        public async Task<IActionResult> GetCustomerByEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Email is required");
+            }
+
+            Expression<Func<Customer, bool>> filterExpression = customer =>
+                customer.Email.ToLower() == email.ToLower();
+
+            var customer = await _customerService.Get(filterExpression, null);
+
+            if (customer == null)
+            {
+                return NotFound("Customer not found");
+            }
+
+            return Ok(customer);
+        }
+
     }
 }
