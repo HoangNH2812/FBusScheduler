@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 using System;
 using System.Drawing;
 using System.Linq.Expressions;
@@ -131,9 +132,10 @@ namespace Team6._FBusSchedule_.API.Controllers
             }
 
             Expression<Func<Customer, bool>> filterExpression = customer =>
-                customer.Email.ToLower() == email.ToLower();
+                 customer.Email.ToLower() == email.ToLower();
 
-            var customer = await _customerService.Get(filterExpression, null);
+            var customers = await _customerService.Get(filterExpression, null);
+            var customer = customers.SingleOrDefault();
 
             if (customer == null)
             {

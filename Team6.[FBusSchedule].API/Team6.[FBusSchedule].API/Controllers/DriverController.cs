@@ -133,7 +133,8 @@ namespace Team6._FBusSchedule_.API.Controllers
             Expression<Func<Driver, bool>> filterExpression = driver =>
                 driver.Email.ToLower() == email.ToLower();
 
-            var driver = await _driverService.Get(filterExpression, null);
+            var drivers = await _driverService.Get(filterExpression, null);
+            var driver = drivers.SingleOrDefault();
 
             if (driver == null)
             {
