@@ -123,5 +123,18 @@ namespace Team6._FBusSchedule_.API.Controllers
             _routeService.DeleteAsync(RouteID);
             return Ok();
         }
+        [Authorize]
+        [HttpGet("getroutebyname")]
+        public async Task<IActionResult> GetRouteByName(string routeName)
+        {
+            string normalizedRouteName = routeName.ToLower();
+
+            Expression<Func<Route, bool>> filterExpression = route => route.RouteName.ToLower() == normalizedRouteName;
+
+            var routes = await _routeService.Get(filterExpression, null);
+            return Ok(routes);
+        }
+
+
     }
 }

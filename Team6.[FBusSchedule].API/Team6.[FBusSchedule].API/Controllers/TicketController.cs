@@ -114,6 +114,15 @@ namespace Team6._FBusSchedule_.API.Controllers
 
             return Ok(ticketCount);
         }
+        [Authorize]
+        [HttpGet("getticketbycustomerid")]
+        public async Task<IActionResult> GetTicketByCustomerId(int customerId)
+        {
+            Expression<Func<Ticket, bool>> filterExpression = ticket => ticket.CustomerId == customerId;
+
+            var tickets = await _ticketService.Get(filterExpression, null);
+            return Ok(tickets);
+        }
 
     }
 }
