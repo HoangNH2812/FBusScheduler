@@ -91,6 +91,11 @@ namespace Team6._FBusSchedule_.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(int DriverID, DriverVM driverVM)
         {
+            if (!await _driverService.IsEmailUnique(driverVM.Email))
+            {
+                return BadRequest("Email already exists");
+            }
+
             Driver driver = new Driver();
             driver = _mapper.Map<DriverVM, Driver>(driverVM);
             driver.DriverId = DriverID;
@@ -102,6 +107,11 @@ namespace Team6._FBusSchedule_.API.Controllers
         [HttpPut("driverid")]
         public async Task<IActionResult> Update(int DriverID, DriverVM driverVM)
         {
+            if (!await _driverService.IsEmailUnique(driverVM.Email))
+            {
+                return BadRequest("Email already exists");
+            }
+
             var driver = _mapper.Map<DriverVM, Driver>(driverVM);
             driver.DriverId = DriverID;
             await _driverService.UpdateAsync(driver);

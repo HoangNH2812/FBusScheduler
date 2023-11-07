@@ -65,5 +65,11 @@ namespace Team6._FbusSchedule_.Service.Service
             _unitOfWork._customerRepository.Update(entityToUpdate);
             await _unitOfWork.SaveChangeAsync();
         }
+        public async Task<bool> IsEmailUnique(string email)
+        {
+            var existingCustomer = await _unitOfWork._customerRepository.GetByEmailAsync(email);
+            return existingCustomer == null;
+        }
+
     }
 }

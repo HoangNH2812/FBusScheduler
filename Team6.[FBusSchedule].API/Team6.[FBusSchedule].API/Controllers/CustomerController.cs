@@ -93,6 +93,10 @@ namespace Team6._FBusSchedule_.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(int CusID,CustomerVM cusVM)
         {
+            if (!await _customerService.IsEmailUnique(cusVM.Email))
+            {
+                return BadRequest("Email already exists");
+            }
             Customer cus = new Customer();
             cus = _mapper.Map<CustomerVM, Customer>(cusVM);
             cus.CustomerId = CusID;
@@ -104,6 +108,10 @@ namespace Team6._FBusSchedule_.API.Controllers
         [HttpPut("customerid")]
         public async Task<IActionResult> Update(int CustomerId, CustomerVM customerVM)
         {
+            if (!await _customerService.IsEmailUnique(customerVM.Email))
+            {
+                return BadRequest("Email already exists");
+            }
             var cus = _mapper.Map<CustomerVM, Customer>(customerVM);
             cus.CustomerId = CustomerId;
             await _customerService.UpdateAsync(cus);

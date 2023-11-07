@@ -21,5 +21,6 @@ namespace Team6._FbusSchedule_.Service.IServices
         Task<bool> DeleteAsync(Customer entityToDelete);
         Task UpdateAsync(Customer entityToUpdate);
         void Dispose();
+        Task<bool> IsEmailUnique(string email);
     }
 }

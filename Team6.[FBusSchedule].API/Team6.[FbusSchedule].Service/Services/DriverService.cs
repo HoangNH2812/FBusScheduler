@@ -64,5 +64,11 @@ namespace Team6._FbusSchedule_.Service.Service
             _unitOfWork._driverRepository.Update(entityToUpdate);
             await _unitOfWork.SaveChangeAsync();
         }
+        public async Task<bool> IsEmailUnique(string email)
+        {
+            var existingDriver = await _unitOfWork._driverRepository.GetByEmailAsync(email);
+            return existingDriver == null;
+        }
+
     }
 }
