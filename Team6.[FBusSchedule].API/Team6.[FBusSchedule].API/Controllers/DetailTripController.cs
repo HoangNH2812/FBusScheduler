@@ -30,10 +30,50 @@ namespace Team6._FBusSchedule_.API.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> List(int page=1)
+        public async Task<IActionResult> List(string? filter = null, string? orderBy = null, int page = 1)
         {
-            var detailTripList = await _detailTripService.Get();
-            var pagedetailTripList = PaginatedList<DetailTrip>.Create(detailTripList, page, PAGE_SIZE);
+                Expression<Func<DetailTrip, bool>> filterExpression = null;
+                Func<IQueryable<DetailTrip>, IOrderedQueryable<DetailTrip>> orderByFunc = null;
+                if (!string.IsNullOrEmpty(filter))
+                {
+                    string[] filterParts = filter.Split('|');
+                    if (filterParts.Length == 2 && DateTime.TryParse(filterParts[0], out DateTime filterDate))
+                    {
+                        filterExpression = detailTrip =>
+                            detailTrip.TripID.ToString().Contains(filterParts[1]) ||
+                            detailTrip.StationID.ToString().Contains(filterParts[1]) ||
+                            detailTrip.ArrivalTime.HasValue && detailTrip.ArrivalTime.Value.Date == filterDate.Date;
+                    }
+                    else
+                    {
+                        filterExpression = detailTrip =>
+                            detailTrip.TripID.ToString().Contains(filter) ||
+                            detailTrip.StationID.ToString().Contains(filter);
+                    }
+                }
+                if (!string.IsNullOrEmpty(orderBy))
+                {
+                    switch (orderBy.ToLower())
+                    {
+                        case "tripid":
+                            orderByFunc = query => query.OrderBy(detailTrip => detailTrip.TripID);
+                            break;
+                        case "tripid_desc":
+                            orderByFunc = query => query.OrderByDescending(detailTrip => detailTrip.TripID);
+                            break;
+                        case "stationid":
+                            orderByFunc = query => query.OrderBy(detailTrip => detailTrip.StationID);
+                            break;
+                        case "stationid_desc":
+                            orderByFunc = query => query.OrderByDescending(detailTrip => detailTrip.StationID);
+                            break;
+                        default:
+                            orderByFunc = query => query.OrderBy(detailTrip => detailTrip.TripID);
+                            break;
+                    }
+                }
+                var detailTripList = await _detailTripService.Get(filterExpression, orderByFunc);
+                var pagedetailTripList = PaginatedList<DetailTrip>.Create(detailTripList, page, PAGE_SIZE);
             return Ok(pagedetailTripList);
         }
 
