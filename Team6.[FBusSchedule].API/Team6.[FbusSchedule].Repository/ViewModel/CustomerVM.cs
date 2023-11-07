@@ -5,6 +5,7 @@ namespace Team6._FbusSchedule_.Repository.ViewModel;
 
 public partial class CustomerVM
 {
+    public int CustomerId { get; set; }
     public string CustomerName { get; set; }
 
     public int? Age { get; set; }

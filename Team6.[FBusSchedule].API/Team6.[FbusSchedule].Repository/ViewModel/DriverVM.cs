@@ -5,6 +5,7 @@ namespace Team6._FbusSchedule_.Repository.ViewModel;
 
 public partial class DriverVM
 {
+    public int DriverId { get; set; }
     public string DriverName { get; set; }
 
     public string? DriverPhone { get; set; }
