@@ -108,10 +108,6 @@ namespace Team6._FBusSchedule_.API.Controllers
         [HttpPut("customerid")]
         public async Task<IActionResult> Update(int CustomerId, CustomerVM customerVM)
         {
-            if (!await _customerService.IsEmailUnique(customerVM.Email))
-            {
-                return BadRequest("Email already exists");
-            }
             var cus = _mapper.Map<CustomerVM, Customer>(customerVM);
             cus.CustomerId = CustomerId;
             await _customerService.UpdateAsync(cus);
