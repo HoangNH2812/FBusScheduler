@@ -22,7 +22,7 @@ public partial class Trip
     [JsonIgnore]
     public virtual Bus Bus { get; set; }
     [JsonIgnore]
-    public virtual DetailTrip DetailTrip { get; set; }
+    public ICollection<DetailTrip> DetailTrips { get; set; }
     [JsonIgnore]
     public virtual Driver Driver { get; set; }
     [JsonIgnore]

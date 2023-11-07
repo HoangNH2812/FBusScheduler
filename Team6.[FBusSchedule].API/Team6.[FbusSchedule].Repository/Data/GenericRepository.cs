@@ -79,7 +79,6 @@ namespace Team6._FbusSchedule_.Repository.Data
             {
                 query = query.Include(includeProperty);
             }
-
             if (orderBy != null)
             {
                 return await orderBy(query).ToListAsync();

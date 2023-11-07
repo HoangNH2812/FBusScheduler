@@ -94,25 +94,26 @@ public partial class PostgresContext : DbContext
 
         modelBuilder.Entity<DetailTrip>(entity =>
         {
-            entity.HasKey(e => e.TripId).HasName("DetailTrip_pkey");
-
             entity.ToTable("DetailTrip");
 
-            entity.Property(e => e.TripId)
-                .ValueGeneratedNever()
-                .HasColumnName("TripID");
+            // Define the composite primary key for DetailTrip
+            entity.HasKey(dt => new { dt.TripID, dt.StationID });
+
             entity.Property(e => e.ArrivalTime).HasColumnType("timestamp without time zone");
-            entity.Property(e => e.StationId).HasColumnName("StationID");
 
-            entity.HasOne(d => d.Station).WithMany(p => p.DetailTrips)
-                .HasForeignKey(d => d.StationId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("DetailTrip_StationID_fkey");
-
-            entity.HasOne(d => d.Trip).WithOne(p => p.DetailTrip)
-                .HasForeignKey<DetailTrip>(d => d.TripId)
+            // Set up the relationship with Trip
+            entity.HasOne(d => d.Trip)
+                .WithMany(p => p.DetailTrips)
+                .HasForeignKey(d => d.TripID)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("DetailTrip_TripID_fkey");
+
+            // Set up the relationship with Station
+            entity.HasOne(d => d.Station)
+                .WithMany(p => p.DetailTrips)
+                .HasForeignKey(d => d.StationID)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("DetailTrip_StationID_fkey");
         });
 
         modelBuilder.Entity<Driver>(entity =>

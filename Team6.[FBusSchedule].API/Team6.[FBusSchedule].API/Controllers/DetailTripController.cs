@@ -30,61 +30,21 @@ namespace Team6._FBusSchedule_.API.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> List(string? filter = null, string? orderBy = null, int page=1)
+        public async Task<IActionResult> List(int page=1)
         {
-            Expression<Func<DetailTrip, bool>> filterExpression = null;
-            Func<IQueryable<DetailTrip>, IOrderedQueryable<DetailTrip>> orderByFunc = null;
-
-            if (!string.IsNullOrEmpty(filter))
-            {
-                string[] filterParts = filter.Split('|');
-                if (filterParts.Length == 2 && DateTime.TryParse(filterParts[0], out DateTime filterDate))
-                {
-                    filterExpression = detailTrip =>
-                        detailTrip.TripId.ToString().Contains(filterParts[1]) ||
-                        detailTrip.StationId.ToString().Contains(filterParts[1]) ||
-                        detailTrip.ArrivalTime.HasValue && detailTrip.ArrivalTime.Value.Date == filterDate.Date;
-                }
-                else
-                {
-                    filterExpression = detailTrip =>
-                        detailTrip.TripId.ToString().Contains(filter) ||
-                        detailTrip.StationId.ToString().Contains(filter);
-                }
-            }
-
-            if (!string.IsNullOrEmpty(orderBy))
-            {
-                switch (orderBy.ToLower())
-                {
-                    case "tripid":
-                        orderByFunc = query => query.OrderBy(detailTrip => detailTrip.TripId);
-                        break;
-                    case "tripid_desc":
-                        orderByFunc = query => query.OrderByDescending(detailTrip => detailTrip.TripId);
-                        break;
-                    case "stationid":
-                        orderByFunc = query => query.OrderBy(detailTrip => detailTrip.StationId);
-                        break;
-                    case "stationid_desc":
-                        orderByFunc = query => query.OrderByDescending(detailTrip => detailTrip.StationId);
-                        break;
-                    default:
-                        orderByFunc = query => query.OrderBy(detailTrip => detailTrip.TripId);
-                        break;
-                }
-            }
-
-            var detailTripList = await _detailTripService.Get(filterExpression, orderByFunc);
+            var detailTripList = await _detailTripService.Get();
             var pagedetailTripList = PaginatedList<DetailTrip>.Create(detailTripList, page, PAGE_SIZE);
             return Ok(pagedetailTripList);
         }
 
         [Authorize]
-        [HttpGet("detailtripid")]
-        public async Task<IActionResult> GetById(int id)
+        [HttpGet("tripidAndstationid")]
+        public async Task<IActionResult> GetById(int tripid, int stationid)
         {
-            var detailTrip = await _detailTripService.GetByID(id);
+            var detailTrip = await _detailTripService.GetByTripAndStationId(tripid, stationid);
+            if (detailTrip == null)
+                return NotFound();
+
             return Ok(detailTrip);
         }
 
@@ -98,10 +58,10 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         [Authorize]
-        [HttpPut("detailtripid")]
-        public async Task<IActionResult> Update(int id, [FromBody] DetailTripVM detailTripVM)
+        [HttpPut("tripidAndstationid")]
+        public async Task<IActionResult> Update(int tripid, int stationid, [FromBody] DetailTripVM detailTripVM)
         {
-            var existingDetailTrip = await _detailTripService.GetByID(id);
+            var existingDetailTrip = await _detailTripService.GetByTripAndStationId(tripid, stationid);
             if (existingDetailTrip == null)
                 return NotFound();
 
@@ -112,14 +72,14 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         [Authorize]
-        [HttpDelete("detailtripid")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("tripidAndstationid")]
+        public async Task<IActionResult> Delete(int tripid, int stationid)
         {
-            var detailTrip = await _detailTripService.GetByID(id);
+            var detailTrip = await _detailTripService.GetByTripAndStationId(tripid, stationid);
             if (detailTrip == null)
                 return NotFound();
 
-            await _detailTripService.DeleteAsync(id);
+            await _detailTripService.DeleteAsync(detailTrip);
             return Ok();
         }
     }

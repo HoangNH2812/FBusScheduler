@@ -141,8 +141,9 @@ namespace Team6._FBusSchedule_.API.Controllers
             {
                 return NotFound("Customer not found");
             }
+            var customerVM = _mapper.Map<Customer, CustomerVM>(customer);
 
-            return Ok(customer);
+            return Ok(customerVM);
         }
 
     }

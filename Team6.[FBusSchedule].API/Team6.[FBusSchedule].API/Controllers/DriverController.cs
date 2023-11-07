@@ -140,8 +140,8 @@ namespace Team6._FBusSchedule_.API.Controllers
             {
                 return NotFound("Customer not found");
             }
-
-            return Ok(driver);
+            var driverVM = _mapper.Map<Driver, DriverVM>(driver);
+            return Ok(driverVM);
         }
     }
 }

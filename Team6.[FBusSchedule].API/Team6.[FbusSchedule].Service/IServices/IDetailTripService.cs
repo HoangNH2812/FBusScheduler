@@ -10,6 +10,7 @@ namespace Team6._FbusSchedule_.Service.IServices
 {
     public interface IDetailTripService
     {
+        Task<DetailTrip> GetByTripAndStationId(int tripid, int stationid);
         Task<List<DetailTrip>> Get(Expression<Func<DetailTrip, bool>> filter = null,
         Func<IQueryable<DetailTrip>, IOrderedQueryable<DetailTrip>> orderBy = null,
         params Expression<Func<DetailTrip, object>>[] includeProperties);

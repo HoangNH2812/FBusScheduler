@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Team6._FbusSchedule_.Repository.EntityModel;
 
 public partial class DetailTrip
 {
-    public int TripId { get; set; }
 
-    public int StationId { get; set; }
+    public int TripID { get; set; }
+
+    public int StationID { get; set; }
 
     public DateTime? ArrivalTime { get; set; }
 

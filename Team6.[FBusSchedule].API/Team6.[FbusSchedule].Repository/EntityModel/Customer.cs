@@ -13,7 +13,6 @@ public partial class Customer
     public int? Age { get; set; }
 
     public string? Email { get; set; }
-    
     [JsonIgnore]
     public string? Password { get; set; }
     public bool? Status { get; set; }
