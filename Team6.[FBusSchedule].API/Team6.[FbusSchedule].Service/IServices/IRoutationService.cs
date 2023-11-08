@@ -20,5 +20,6 @@ namespace Team6._FbusSchedule_.Service.IServices
         Task<bool> DeleteAsync(Routation entityToDelete);
         Task UpdateAsync(Routation entityToUpdate);
         void Dispose();
+        Task<Routation> GetByRouteAndStationId(int tripid, int stationid);
     }
 }

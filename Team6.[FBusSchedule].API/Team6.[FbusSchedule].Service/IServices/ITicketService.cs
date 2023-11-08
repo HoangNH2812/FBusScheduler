@@ -20,6 +20,7 @@ namespace Team6._FbusSchedule_.Service.IServices
         Task<bool> DeleteAsync(Ticket entityToDelete);
         Task UpdateAsync(Ticket entityToUpdate);
         void Dispose();
+        Task<List<Ticket>> ListByTripId(int tripId);
         Task<int> CountByTripId(int tripId);
     }
 }

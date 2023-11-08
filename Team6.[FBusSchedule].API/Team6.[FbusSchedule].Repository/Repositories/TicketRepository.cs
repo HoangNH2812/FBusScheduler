@@ -16,9 +16,15 @@ namespace Team6._FbusSchedule_.Repository.Repositories
         {
         }
 
-        public Task<int> CountByTripId(int tripId)
+        public Task<List<Ticket>> ListByTripId(int tripId)
         {
             return  context.Tickets
+            .Where(t => t.TripId == tripId)
+            .ToListAsync();
+        }
+        public Task<int> CountByTripId(int tripId)
+        {
+            return context.Tickets
             .Where(t => t.TripId == tripId)
             .CountAsync();
         }

@@ -14,6 +14,7 @@ public partial class PostgresContext : DbContext
     public PostgresContext(DbContextOptions<PostgresContext> options)
         : base(options)
     {
+
     }
 
     public virtual DbSet<Bus> Buses { get; set; }
@@ -137,23 +138,20 @@ public partial class PostgresContext : DbContext
 
         modelBuilder.Entity<Routation>(entity =>
         {
-            entity.HasKey(e => new { e.RouteId, e.StationId }).HasName("Routation_pkey");
+            entity.HasKey(e => new { e.RouteID, e.StationID });
 
             entity.ToTable("Routation");
 
-            entity.Property(e => e.RouteId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("RouteID");
-            entity.Property(e => e.StationId).HasColumnName("StationID");
             entity.Property(e => e.DefaultDuration).HasColumnType("timestamp without time zone");
-
-            entity.HasOne(d => d.Route).WithMany(p => p.Routations)
-                .HasForeignKey(d => d.RouteId)
+            entity.HasOne(d => d.Route)
+                .WithMany(p => p.Routations)
+                .HasForeignKey(d => d.RouteID)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Routation_RouteID_fkey");
 
-            entity.HasOne(d => d.Station).WithMany(p => p.Routations)
-                .HasForeignKey(d => d.StationId)
+            entity.HasOne(d => d.Station)
+                .WithMany(p => p.Routations)
+                .HasForeignKey(d => d.StationID)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Routation_StationID_fkey");
         });

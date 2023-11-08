@@ -6,6 +6,7 @@ namespace Team6._FbusSchedule_.Repository.ViewModel;
 
 public partial class RoutationVM
 {
+    public int RouteId { get; set; }
     public int StationId { get; set; }
 
     public int? StationIndex { get; set; }

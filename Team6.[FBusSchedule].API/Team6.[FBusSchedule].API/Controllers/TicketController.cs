@@ -108,9 +108,9 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
         [Authorize]
         [HttpGet("tripid")]
-        public async Task<IActionResult> CountByTripId(int tripId)
+        public async Task<IActionResult> ListByTripId(int tripId)
         {
-            int ticketCount = await _ticketService.CountByTripId(tripId);
+            var ticketCount = await _ticketService.ListByTripId(tripId);
 
             return Ok(ticketCount);
         }
@@ -123,6 +123,13 @@ namespace Team6._FBusSchedule_.API.Controllers
             var tickets = await _ticketService.Get(filterExpression, null);
             return Ok(tickets);
         }
+        [Authorize]
+        [HttpGet("count/tripid")]
+        public async Task<IActionResult> CountByTripId(int tripId)
+        {
+            var ticketCount = await _ticketService.CountByTripId(tripId);
 
+            return Ok(ticketCount);
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace Team6._FbusSchedule_.Repository.IRepositories
 {
     public interface ITicketRepository : IGenericRepository<Ticket, int>
     {
+        Task<List<Ticket>> ListByTripId(int tripId);
         Task<int> CountByTripId(int tripId);
     }
 }

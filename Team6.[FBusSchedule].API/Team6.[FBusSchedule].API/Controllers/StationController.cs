@@ -24,7 +24,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             _stationService = stationService;
             _mapper = mapper;
         }
-        // GET: api/Bus
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> List(string? filter = null, string? orderBy = null, int page = 1)
@@ -51,7 +51,7 @@ namespace Team6._FBusSchedule_.API.Controllers
                     case "id_desc":
                         orderByFunc = query => query.OrderByDescending(station => station.StationId);
                         break;
-                    // Thêm các trường hợp orderBy khác ở đây
+
                     default:
                         orderByFunc = query => query.OrderBy(station => station.StationName);
                         break;
@@ -73,7 +73,7 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
 
-        // GET: api/Bus/5
+
         [Authorize]
         [HttpGet("stationid")]
         public async Task<IActionResult> ListByID(int StationID)
@@ -82,7 +82,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(_listbyid);
         }
 
-        // POST: api/Bus
+
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(int StationID, StationVM stationVM)
@@ -104,7 +104,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(station);
         }
 
-        // DELETE: api/Bus/5
+
         [Authorize]
         [HttpDelete("stationid")]
         public async Task<IActionResult> Delete(int StationID)

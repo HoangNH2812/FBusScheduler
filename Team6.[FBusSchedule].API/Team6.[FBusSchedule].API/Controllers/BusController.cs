@@ -25,7 +25,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             _busService = busService;
             _mapper = mapper;
         }
-        // GET: api/Bus
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> List(string? filter = null, string? orderBy = null, int page = 1)
@@ -82,7 +82,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return null;
         }
 
-        // GET: api/Bus/5
+
         [Authorize]
         [HttpGet("busid")]
         public async Task<IActionResult> ListByID(int BusId)
@@ -91,7 +91,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(_listbyid);
         }
 
-        // POST: api/Bus
+
         [Authorize]
         [HttpPost]
         public async Task<IActionResult> Create(int BusID,BusVM busVM)

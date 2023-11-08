@@ -65,5 +65,9 @@ namespace Team6._FbusSchedule_.Service.Services
             _unitOfWork._routationRepository.Update(entityToUpdate);
             await _unitOfWork.SaveChangeAsync();
         }
+        public async Task<Routation> GetByRouteAndStationId(int tripid, int stationid)
+        {
+            return await _unitOfWork._routationRepository.GetByRouteAndStationId(tripid, stationid);
+        }
     }
 }

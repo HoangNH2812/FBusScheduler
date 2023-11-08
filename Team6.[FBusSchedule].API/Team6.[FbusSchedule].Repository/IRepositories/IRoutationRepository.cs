@@ -10,5 +10,6 @@ namespace Team6._FbusSchedule_.Repository.IRepositories
 {
     public interface IRoutationRepository: IGenericRepository<Routation, int>
     {
+        Task<Routation> GetByRouteAndStationId(int tripid, int stationid);
     }
 }

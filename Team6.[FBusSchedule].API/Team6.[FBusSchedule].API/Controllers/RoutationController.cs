@@ -39,7 +39,8 @@ namespace Team6._FBusSchedule_.API.Controllers
             {
 
                 filterExpression = routation =>
-                    routation.StationId.ToString().Contains(filter) ||
+                    routation.RouteID.ToString().Contains(filter) ||
+                    routation.StationID.ToString().Contains(filter) ||
                      routation.StationIndex.ToString().Contains(filter)||
                      routation.StationMode.ToString().Contains(filter);
             }
@@ -49,14 +50,13 @@ namespace Team6._FBusSchedule_.API.Controllers
                 switch (orderBy.ToLower())
                 {
                     case "id":
-                        orderByFunc = query => query.OrderBy(routation => routation.RouteId);
+                        orderByFunc = query => query.OrderBy(routation => routation.RouteID);
                         break;
                     case "id_desc":
-                        orderByFunc = query => query.OrderByDescending(routation => routation.RouteId);
+                        orderByFunc = query => query.OrderByDescending(routation => routation.RouteID);
                         break;
-                    // Thêm các trường hợp orderBy khác ở đây
                     default:
-                        orderByFunc = query => query.OrderBy(routation => routation.RouteId); // Sử dụng một trường khác thích hợp
+                        orderByFunc = query => query.OrderBy(routation => routation.RouteID); 
                         break;
                 }
             }
@@ -67,42 +67,47 @@ namespace Team6._FBusSchedule_.API.Controllers
         }
 
         [Authorize]
-        [HttpGet("routeid")]
-        public async Task<IActionResult> GetById(int routeId)
+        [HttpGet("routeidAndstationid")]
+        public async Task<IActionResult> GetById(int routeId, int stationId)
         {
-            var route = await _routeTationService.GetByID(routeId);
+            var route = await _routeTationService.GetByRouteAndStationId(routeId, stationId);
+            if (route == null)
+                return NotFound();
+
             return Ok(route);
         }
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Create(int routeId, RoutationVM routationVM)
+        public async Task<IActionResult> Create([FromBody] RoutationVM routationVM)
         {
             Routation routation = _mapper.Map<RoutationVM, Routation>(routationVM);
-            routation.RouteId = routeId;
             await _routeTationService.AddAsync(routation);
-            return Ok(routation);
+            return Ok(routation);           
         }
 
         [Authorize]
-        [HttpPut("routeid")]
-        public async Task<IActionResult> Update(int routeId, [FromBody] RoutationVM routationVM)
+        [HttpPut("routeidAndstationid")]
+        public async Task<IActionResult> Update(int routeId,int stationId, [FromBody] RoutationVM routationVM)
         {
-            var routation = _mapper.Map<RoutationVM, Routation>(routationVM);
-            routation.RouteId = routeId;
+            var existingRoutation = await _routeTationService.GetByRouteAndStationId(routeId, stationId);
+            if (existingRoutation == null)
+                return NotFound();
+
+            var routation = _mapper.Map(routationVM, existingRoutation);
             await _routeTationService.UpdateAsync(routation);
             return Ok(routation);
         }
 
         [Authorize]
-        [HttpDelete("routeid")]
-        public async Task<IActionResult> Delete(int routeId)
+        [HttpDelete("routeidAndstationid")]
+        public async Task<IActionResult> Delete(int routeId, int stationId)
         {
-            var route = await _routeTationService.GetByID(routeId);
-            if (route == null)
+            var existingRoutation = await _routeTationService.GetByRouteAndStationId(routeId, stationId);
+            if (existingRoutation == null)
                 return NotFound();
 
-            await _routeTationService.DeleteAsync(routeId);
+            await _routeTationService.DeleteAsync(existingRoutation);
             return Ok();
         }
     }

@@ -9,24 +9,6 @@ using Team6._FBusSchedule_.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-/*builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-// Add services to the container.
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-            ValidAudience = builder.Configuration["JwtSettings:Audience"],
-            ValidateAudience = true,
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:Key"]))
-        };
-    });
-*/
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
@@ -78,5 +60,5 @@ var app = builder.Build();
 
     app.MapControllers();
 }
-//app.Run("http://0.0.0.0:80")
+//app.Run("http://0.0.0.0:80");
 app.Run();

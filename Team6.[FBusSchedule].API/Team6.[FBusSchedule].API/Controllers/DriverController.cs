@@ -25,7 +25,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             _driverService = driverService;
             _mapper = mapper;
         }
-        // GET: api/Bus
+
         [Authorize]
         [HttpGet]
         public async Task<IActionResult> List(string? filter = null, string? orderBy = null, int page = 1)
@@ -78,7 +78,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return null;
         }
 
-        // GET: api/Bus/5
+
         [Authorize]
         [HttpGet("driverid")]
         public async Task<IActionResult> ListByID(int DriverID)
@@ -87,7 +87,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(_listbyid);
         }
 
-        // POST: api/Bus
+
         [HttpPost]
         public async Task<IActionResult> Create(int DriverID, DriverVM driverVM)
         {
@@ -113,7 +113,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             return Ok(driver);
         }
 
-        // DELETE: api/Bus/5
+
         [Authorize]
         [HttpDelete("driverid")]
         public async Task<IActionResult> Delete(int DriverID)
@@ -125,7 +125,7 @@ namespace Team6._FBusSchedule_.API.Controllers
             _driverService.DeleteAsync(DriverID);
             return Ok();
         }
-        // GET: api/driver/byemail
+
         [Authorize]
         [HttpGet("byemail")]
         public async Task<IActionResult> GetDriverByEmail(string email)

@@ -6,9 +6,9 @@ namespace Team6._FbusSchedule_.Repository.EntityModel;
 
 public partial class Routation
 {
-    public int? RouteId { get; set; }
+    public int? RouteID { get; set; }
 
-    public int StationId { get; set; }
+    public int? StationID { get; set; }
 
     public int? StationIndex { get; set; }
 
