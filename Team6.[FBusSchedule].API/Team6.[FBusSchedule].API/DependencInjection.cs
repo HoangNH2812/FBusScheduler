@@ -15,6 +15,7 @@ namespace Team6._FBusSchedule_.API
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddHttpContextAccessor();
             services.AddDbContext<PostgresContext>(option =>
             option.UseNpgsql("Username=postgres;Password=mwJvgQqPzjhXwWrb;Server=db.lnyxdixalclqvtxigwnl.supabase.co;Port=5432;Database=postgres"));
 

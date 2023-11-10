@@ -21,12 +21,14 @@ namespace Team6._FBusSchedule_.API.Controllers
         private readonly ICustomerService _customerService;
         private readonly IDriverService _driverService;
         private readonly string _secretKey;
+        private readonly IConfiguration _configuration;
 
-        public authController(ICustomerService customerService, IDriverService driverService, IOptionsMonitor<AppSetting> optionsMonitor)
+        public authController(ICustomerService customerService, IDriverService driverService, IOptionsMonitor<AppSetting> optionsMonitor, IConfiguration configuration)
         {
             _customerService = customerService;
             _driverService = driverService;
             _secretKey = optionsMonitor.CurrentValue.SecretKey.IsNullOrEmpty() ? "" : optionsMonitor.CurrentValue.SecretKey;
+            _configuration = configuration;
         }
 
         [HttpPost("customerLogin")]
@@ -102,6 +104,47 @@ namespace Team6._FBusSchedule_.API.Controllers
 
             return jwtTokenHandler.WriteToken(token);
         }
+        [HttpPost("adminLogin")]
+        public async Task<IActionResult> AdminLogin(LoginVM model, [FromServices] IHttpContextAccessor accessor)
+        {
+            var adminEmail = _configuration["AdminAccount:Email"];
+            var adminPassword = _configuration["AdminAccount:Password"];
+
+            if (model.Email == adminEmail && model.Password == adminPassword)
+            {
+                // Create a token for the admin
+                var identity = new ClaimsIdentity(new[]
+                {
+            new Claim(ClaimTypes.Name, "Admin"),
+            new Claim("Email", adminEmail),
+            new Claim("TokenId", Guid.NewGuid().ToString())
+        });
+
+                var jwtTokenHandler = new JwtSecurityTokenHandler();
+                var secretKeyBytes = Encoding.UTF8.GetBytes(_secretKey);
+
+                var tokenDescription = new SecurityTokenDescriptor
+                {
+                    Subject = identity,
+                    Expires = DateTime.UtcNow.AddDays(1),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.Aes128CbcHmacSha256)
+                };
+
+                var token = jwtTokenHandler.CreateToken(tokenDescription);
+
+                return Ok(new ApiResponse
+                {
+                    Success = true,
+                    Messsage = "Authenticate success",
+                    Data = jwtTokenHandler.WriteToken(token)
+                });
+            }
+            else
+            {
+                return Unauthorized("Invalid email or password for admin.");
+            }
+        }
+
 
     }
 }

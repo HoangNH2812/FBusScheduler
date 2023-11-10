@@ -12308,6 +12308,7 @@
       "Microsoft.EntityFrameworkCore.SqlServer >= 6.0.23",
       "Microsoft.EntityFrameworkCore.Sqlite >= 6.0.23",
       "Microsoft.EntityFrameworkCore.Tools >= 6.0.23",
+      "Microsoft.Extensions.Configuration >= 7.0.0",
       "Microsoft.IdentityModel.Tokens >= 7.0.2",
       "Microsoft.VisualStudio.Azure.Containers.Tools.Targets >= 1.19.4",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 6.0.16",
@@ -12390,6 +12391,10 @@
             "suppressParent": "All",
             "target": "Package",
             "version": "[6.0.23, )"
+          },
+          "Microsoft.Extensions.Configuration": {
+            "target": "Package",
+            "version": "[7.0.0, )"
           },
           "Microsoft.IdentityModel.Tokens": {
             "target": "Package",
